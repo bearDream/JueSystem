@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -33,14 +34,17 @@ public class LoginController {
     @Autowired
     public LoginService mLoginService;
 
+    //user:用户名和密码   model：设备型号
     @PostMapping("/login")
-    public Object login(User user, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
+    public Object login(User user, @RequestParam String model, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
+        System.out.println(user.getUsername() + "-----" + user.getPassword() + "-------" + model);
         if (session.getAttribute(Constants.USER) != null){
-            System.out.println(session.getAttribute(Constants.USER).toString());
+            System.out.println("已登陆 -->"+session.getAttribute(Constants.USER).toString());
+            return ResultUtil.success(session.getAttribute(Constants.USER).toString());
         }
-        if (mLoginService.login(user, request, session)){
-            return ResultUtil.success("登录成功");
+        if (mLoginService.login(user, model, request, session)){
+            return ResultUtil.success(session.getAttribute(Constants.USER).toString());
         }
-        return ResultUtil.success("登录失败");
+        return ResultUtil.error(-1,"登录失败");
     }
 }

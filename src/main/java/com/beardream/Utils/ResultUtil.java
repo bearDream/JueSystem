@@ -10,7 +10,7 @@ public class ResultUtil {
     public final static Object success(Object data){
         Result result = new Result();
         result.setCode(0);
-        result.setMsg("数据成功");
+        result.setMsg("后台正常");
         result.setData(data);
         return result;
     }

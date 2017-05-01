@@ -30,27 +30,33 @@ public class LoginService {
     @Autowired
     private UserDetailMapper mUserDetailMapper;
 
-    public boolean login(User user, HttpServletRequest request, HttpSession session){
+    public boolean login(User user, String model, HttpServletRequest request, HttpSession session){
 
         if (user == null){
             throw new NullPointerException("user不能为空");
         }
-//        System.out.println(userMapper.find(user.getUsername()));
+        if (model == null){
+            model = "";
+        }
         User user1 = mUserMapper.find(user.getUsername());
-        UserDetail userDetail = mUserDetailMapper.selectByPrimaryKey(user1.getUserId());
-        System.out.println(user1.getUsername());
         if(user1 == null){
             //用户名不存在
             return false;
         }
+        System.out.println(user1.getUserId());
+        UserDetail userDetail = mUserDetailMapper.selectByPrimaryKey(user1.getUserId());
+        System.out.println(user1.getUsername());
         if(user1.getPassword().equals(MD5.GetMD5Code(user.getPassword()))){
+            //生成token
+            String token = user.getUsername() + user.getPassword() + model + System.currentTimeMillis();
+            token = MD5.GetMD5Code(token);
             //登录成功
             userDetail.setLastLoginDate(new Date());
             userDetail.setLastLoginIp(Ip.getRemoteLoginUserIp(request));
             userDetail.setLogins(userDetail.getLogins()+1);
             mUserDetailMapper.updateByPrimaryKey(userDetail);
 
-            session.setAttribute(Constants.USER, user1);
+            session.setAttribute(Constants.USER, token);
             session.setMaxInactiveInterval(30*60);
             System.out.println("登录成功");
             return true;
