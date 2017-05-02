@@ -14,7 +14,9 @@ public interface UserMapper {
 
     List<User> findAll();
 
-    User find(String username);
+    User find(String mobile);
+
+    List<User> findSelective(User user);
 
     int updateByPrimaryKeySelective(User record);
 

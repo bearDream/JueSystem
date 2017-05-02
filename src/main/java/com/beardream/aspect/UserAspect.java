@@ -22,7 +22,7 @@ public class UserAspect {
 
     private final static Logger logger = LoggerFactory.getLogger("IndexController.class");
 
-    @Pointcut("execution(public * com.beardream.Controller.UserController.userAdd(..))")
+    @Pointcut("execution(public * com.beardream.Controller.UserController.register(..))")
     public void log(){
     }
 

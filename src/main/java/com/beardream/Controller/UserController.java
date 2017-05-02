@@ -43,12 +43,25 @@ public class UserController {
         return userService.userList();
     }
 
-    @PostMapping(value = "/userAdd")
-    public Object userAdd(@Valid User user, BindingResult bindingResult) throws Exception {
-        System.out.println(user.getUserId());
-        return userService.save(user);
+    @PostMapping(value = "/register")
+    public Object register(@Valid User user, BindingResult bindingResult) throws Exception {
+        System.out.println(user.getMobile());
+        if (userService.check(user)){
+            if(userService.save(user) == 1){
+                //注册成功
+                return ResultUtil.success("注册成功");
+            }
+        }else {
+            return ResultUtil.success(-1,"手机号码已被注册");
+        }
+        return ResultUtil.success(-1,"手机号码已被注册");
     }
 
+    @PostMapping(value = "/alterUser")
+    public Object alter(User user, BindingResult bindingResult){
+
+        return ResultUtil.error(-1,"修改信息失败");
+    }
 
 }
 

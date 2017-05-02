@@ -38,17 +38,17 @@ public class LoginService {
         if (model == null){
             model = "";
         }
-        User user1 = mUserMapper.find(user.getUsername());
+        User user1 = mUserMapper.find(user.getMobile());
         if(user1 == null){
             //用户名不存在
             return false;
         }
         System.out.println(user1.getUserId());
         UserDetail userDetail = mUserDetailMapper.selectByPrimaryKey(user1.getUserId());
-        System.out.println(user1.getUsername());
+        System.out.println(user1.getMobile());
         if(user1.getPassword().equals(MD5.GetMD5Code(user.getPassword()))){
             //生成token
-            String token = user.getUsername() + user.getPassword() + model + System.currentTimeMillis();
+            String token = user.getMobile() + user.getPassword() + model + System.currentTimeMillis();
             token = MD5.GetMD5Code(token);
             //登录成功
             userDetail.setLastLoginDate(new Date());
@@ -57,7 +57,7 @@ public class LoginService {
             mUserDetailMapper.updateByPrimaryKey(userDetail);
 
             session.setAttribute(Constants.USER, token);
-            session.setMaxInactiveInterval(30*60);
+            session.setMaxInactiveInterval(15*24*60*60);//单位是秒   15*24*60*60十五天的过期时间
             System.out.println("登录成功");
             return true;
         }

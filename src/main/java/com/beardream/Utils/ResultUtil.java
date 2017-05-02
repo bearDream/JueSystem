@@ -15,6 +15,14 @@ public class ResultUtil {
         return result;
     }
 
+    public final static Object success(Integer code, Object data){
+        Result result = new Result();
+        result.setCode(code);
+        result.setMsg("后台正常");
+        result.setData(data);
+        return result;
+    }
+
     public final static void success(){
         success(null);
     }

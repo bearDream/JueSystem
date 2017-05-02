@@ -37,19 +37,44 @@
     select
     <include refid="Base_Column_List" />
     from t_user
-    where username = #{username, jdbcType=VARCHAR}
+    where mobile = #{mobile, jdbcType=VARCHAR}
   </select>
-  <select id="login" resultType="User">
-    select
-    <include refid="Base_Column_List" />
+
+  <select id="findSelective" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
     from t_user
-    where username = #{userName, jdbcType=VARCHAR} and password = #{passWord, jdbcType=VARCHAR}
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="username != null">
+        and username = #{username}
+      </if>
+      <if test="email != null">
+        and email = #{email}
+      </if>
+      <if test="mobile != null">
+        and mobile = #{mobile}
+      </if>
+      <if test="gender != null">
+        and gender = #{gender}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+    </where>
+      order by user_id desc
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_user
     where user_id = #{userId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.beardream.model.User">
+  <insert id="insert" parameterType="com.beardream.model.User" useGeneratedKeys="true" keyProperty="userId">
     insert into t_user (user_id, username, password, 
       email, mobile, gender, 
       type, status)
@@ -57,7 +82,7 @@
       #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, 
       #{type,jdbcType=TINYINT}, #{status,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.beardream.model.User">
+  <insert id="insertSelective" parameterType="com.beardream.model.User" useGeneratedKeys="true" keyProperty="userId">
     insert into t_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">

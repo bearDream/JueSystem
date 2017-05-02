@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by soft01 on 2017/4/28.
@@ -37,7 +39,7 @@ public class LoginController {
     //user:用户名和密码   model：设备型号
     @PostMapping("/login")
     public Object login(User user, @RequestParam String model, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
-        System.out.println(user.getUsername() + "-----" + user.getPassword() + "-------" + model);
+        System.out.println(user.getMobile() + "-----" + user.getPassword() + "-------" + model);
         if (session.getAttribute(Constants.USER) != null){
             System.out.println("已登陆 -->"+session.getAttribute(Constants.USER).toString());
             return ResultUtil.success(session.getAttribute(Constants.USER).toString());
@@ -47,4 +49,21 @@ public class LoginController {
         }
         return ResultUtil.error(-1,"登录失败");
     }
+
+    @PostMapping("/isLogin")
+    public Object isLogin(HttpSession session){
+        System.out.println(session.getAttribute(Constants.USER));
+        if (session.getAttribute(Constants.USER) == null){
+            return ResultUtil.success(-1,"未登录");
+        }else {
+            return ResultUtil.success("已登录");
+        }
+    }
+
+    @PostMapping("/logout")
+    public Object logout(User user, BindingResult bindingResult, HttpSession session){
+        session.invalidate();
+        return ResultUtil.error(0,"注销成功");
+    }
+
 }
