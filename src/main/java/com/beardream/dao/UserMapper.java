@@ -14,7 +14,7 @@ public interface UserMapper {
 
     List<User> findAll();
 
-    User find(String mobile);
+    User findByMobile(String mobile);
 
     List<User> findSelective(User user);
 

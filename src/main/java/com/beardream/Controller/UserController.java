@@ -45,7 +45,7 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public Object register(@Valid User user, BindingResult bindingResult) throws Exception {
-        System.out.println(user.getMobile());
+        System.out.println(user.getTel());
         if (userService.check(user)){
             if(userService.save(user) == 1){
                 //注册成功

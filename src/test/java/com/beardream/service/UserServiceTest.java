@@ -55,10 +55,10 @@ public class UserServiceTest {
     @Test
     public void check(){
         User user = new User();
-        user.setMobile("15587186809");
+        user.setTel("15587186809");
         List<User> u = userMapper.findSelective(user);
-        System.out.println(u.get(0).getMobile());
-        Assert.assertEquals("15587186809",u.get(0).getMobile());
+        System.out.println(u.get(0).getTel());
+        Assert.assertEquals("15587186809",u.get(0).getTel());
     }
 
 }

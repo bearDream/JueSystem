@@ -38,16 +38,16 @@ public class LoginController {
 
     //user:用户名和密码   model：设备型号
     @PostMapping("/login")
-    public Object login(User user, @RequestParam String model, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
-        System.out.println(user.getMobile() + "-----" + user.getPassword() + "-------" + model);
+    public Object login(User user, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
+        System.out.println(user.getTel() + "-----" + user.getPassword() + "-------" );
         if (session.getAttribute(Constants.USER) != null){
             System.out.println("已登陆 -->"+session.getAttribute(Constants.USER).toString());
             return ResultUtil.success(session.getAttribute(Constants.USER).toString());
         }
-        if (mLoginService.login(user, model, request, session)){
+        if (mLoginService.login(user, request, session)){
             return ResultUtil.success(session.getAttribute(Constants.USER).toString());
         }
-        return ResultUtil.error(-1,"登录失败");
+        return ResultUtil.error(-1,"用户名和密码错误！");
     }
 
     @PostMapping("/isLogin")

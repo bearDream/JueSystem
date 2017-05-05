@@ -1,37 +1,39 @@
 package com.beardream.model;
 
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-
 public class User {
-
     private Integer userId;
-    @NotNull
+
     private String username;
-    @NotNull
+
     private String password;
 
-    private String salt;
-
-    private String email;
-    @NotNull
-    private String mobile;
+    private String tel;
 
     private String realName;
 
-    private Byte gender;
+    private Integer age;
 
-    private Date birthDate;
+    private String sex;
 
-    private Byte type;
+    private String idCard;
 
-    private Byte status;
+    private String bankCard;
 
-    private Integer orgId;
+    private String address;
+
+    private String weixin;
 
     private String openid;
 
-    private Integer isNew;
+    private Integer logins;
+
+    private String alipay;
+
+    private Byte status;
+
+    private Byte type;
+
+    private Byte level;
 
     public Integer getUserId() {
         return userId;
@@ -57,28 +59,12 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getSalt() {
-        return salt;
+    public String getTel() {
+        return tel;
     }
 
-    public void setSalt(String salt) {
-        this.salt = salt == null ? null : salt.trim();
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile == null ? null : mobile.trim();
+    public void setTel(String tel) {
+        this.tel = tel == null ? null : tel.trim();
     }
 
     public String getRealName() {
@@ -89,44 +75,52 @@ public class User {
         this.realName = realName == null ? null : realName.trim();
     }
 
-    public Byte getGender() {
-        return gender;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setGender(Byte gender) {
-        this.gender = gender;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public String getSex() {
+        return sex;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setSex(String sex) {
+        this.sex = sex == null ? null : sex.trim();
     }
 
-    public Byte getType() {
-        return type;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setType(Byte type) {
-        this.type = type;
+    public void setIdCard(String idCard) {
+        this.idCard = idCard == null ? null : idCard.trim();
     }
 
-    public Byte getStatus() {
-        return status;
+    public String getBankCard() {
+        return bankCard;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setBankCard(String bankCard) {
+        this.bankCard = bankCard == null ? null : bankCard.trim();
     }
 
-    public Integer getOrgId() {
-        return orgId;
+    public String getAddress() {
+        return address;
     }
 
-    public void setOrgId(Integer orgId) {
-        this.orgId = orgId;
+    public void setAddress(String address) {
+        this.address = address == null ? null : address.trim();
+    }
+
+    public String getWeixin() {
+        return weixin;
+    }
+
+    public void setWeixin(String weixin) {
+        this.weixin = weixin == null ? null : weixin.trim();
     }
 
     public String getOpenid() {
@@ -137,31 +131,43 @@ public class User {
         this.openid = openid == null ? null : openid.trim();
     }
 
-    public Integer getIsNew() {
-        return isNew;
+    public Integer getLogins() {
+        return logins;
     }
 
-    public void setIsNew(Integer isNew) {
-        this.isNew = isNew;
+    public void setLogins(Integer logins) {
+        this.logins = logins;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", email='" + email + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", realName='" + realName + '\'' +
-                ", gender=" + gender +
-                ", birthDate=" + birthDate +
-                ", type=" + type +
-                ", status=" + status +
-                ", orgId=" + orgId +
-                ", openid='" + openid + '\'' +
-                ", isNew=" + isNew +
-                '}';
+    public String getAlipay() {
+        return alipay;
+    }
+
+    public void setAlipay(String alipay) {
+        this.alipay = alipay == null ? null : alipay.trim();
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public Byte getLevel() {
+        return level;
+    }
+
+    public void setLevel(Byte level) {
+        this.level = level;
     }
 }
