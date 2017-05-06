@@ -7,7 +7,7 @@ import com.beardream.model.Result;
  */
 public class ResultUtil {
 
-    public final static Object success(Object data){
+    public final static Result success(Object data){
         Result result = new Result();
         result.setCode(0);
         result.setMsg("后台正常");
@@ -15,7 +15,7 @@ public class ResultUtil {
         return result;
     }
 
-    public final static Object success(Integer code, Object data){
+    public final static Result success(Integer code, Object data){
         Result result = new Result();
         result.setCode(code);
         result.setMsg("后台正常");

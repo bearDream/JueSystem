@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
  */
 @EnableAutoConfiguration
 @RestController
+@RequestMapping("/login")
 public class LoginController {
 
 //    @Autowired
@@ -35,7 +36,7 @@ public class LoginController {
     public LoginService mLoginService;
 
     //user:用户名和密码   model：设备型号
-    @PostMapping("/login")
+    @PostMapping()
     public Object login(User user, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
         System.out.println(user.getTel() + "-----" + user.getPassword() + "-------" );
         if (session.getAttribute(Constants.USER) != null){
@@ -58,7 +59,7 @@ public class LoginController {
         }
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public Object logout(User user, BindingResult bindingResult, HttpSession session){
         session.invalidate();
         return ResultUtil.error(0,"注销成功");

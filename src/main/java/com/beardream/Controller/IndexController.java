@@ -21,7 +21,7 @@ public class IndexController {
 
     @GetMapping(value = "/")
     public String index(){
-        return "www.baidu.com";
+        return "/";
     }
 
 }
