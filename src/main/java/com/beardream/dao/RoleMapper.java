@@ -1,7 +1,13 @@
 package com.beardream.dao;
 
 import com.beardream.model.Role;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Mapper
+@Repository
 public interface RoleMapper {
     int deleteByPrimaryKey(Integer roleId);
 
@@ -10,6 +16,8 @@ public interface RoleMapper {
     int insertSelective(Role record);
 
     Role selectByPrimaryKey(Integer roleId);
+
+    List<Role> findBySelective(Role role);
 
     int updateByPrimaryKeySelective(Role record);
 
