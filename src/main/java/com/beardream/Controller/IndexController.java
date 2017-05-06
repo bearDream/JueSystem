@@ -13,6 +13,7 @@ import javax.validation.Valid;
 
 /**
  * Created by soft01 on 2017/3/22.
+ * 首页控制器
  */
 @EnableAutoConfiguration
 @RestController

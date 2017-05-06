@@ -3,6 +3,7 @@ package com.beardream.Controller;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.exception.UserException;
+import com.beardream.ioc.Log;
 import com.beardream.model.User;
 import com.beardream.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by soft01 on 2017/4/17.
+ * 用户控制器
  */
 @EnableAutoConfiguration
 @RestController
@@ -28,6 +30,7 @@ public class UserController {
     @Autowired
     private Environment environment;
 
+    @Log
     @RequestMapping("/get")
     public Object get(@RequestParam(value = "user_id", required = true) int user_id) throws Exception {
         System.out.println(user_id);
