@@ -88,7 +88,8 @@ public class LogAspect {
             String[] values = map.get(name);
             params.append(name+"="+Arrays.toString(values).substring(1, Arrays.toString(values).length()-1)+",");
         }
-        params = new StringBuilder(params.substring(0,params.length()-1));
+        if (params.length() > 0)
+            params = new StringBuilder(params.substring(0,params.length()-1));
         log.setParams(params.toString());
         log.setLogIp(request.getRemoteAddr());
         logMapper.insertSelective(log);

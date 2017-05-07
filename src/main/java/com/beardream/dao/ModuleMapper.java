@@ -4,6 +4,8 @@ import com.beardream.model.Module;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Component
 public interface ModuleMapper {
@@ -15,7 +17,12 @@ public interface ModuleMapper {
 
     Module selectByPrimaryKey(Integer moduleId);
 
+    List<Module> findBySelective();
+
     int updateByPrimaryKeySelective(Module record);
 
     int updateByPrimaryKey(Module record);
+
+    int truncate();
+
 }

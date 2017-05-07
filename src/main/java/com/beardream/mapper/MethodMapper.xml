@@ -17,6 +17,32 @@
     from t_method
     where method_id = #{methodId,jdbcType=INTEGER}
   </select>
+
+  <select id="selectBySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_method
+    <where>
+      <if test="methodId != null">
+        and method_id = #{moduleId}
+      </if>
+      <if test="methodName != null">
+        and method_name = #{methodName}
+      </if>
+      <if test="methodContent != null">
+        and method_content = #{methodContent}
+      </if>
+      <if test="moduleId != null">
+        and module_id = #{moduleId}
+      </if>
+      <if test="actionkey != null">
+        and actionkey = #{actionkey}
+      </if>
+    </where>
+    ORDER BY method_id ASC
+  </select>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_method
     where method_id = #{methodId,jdbcType=INTEGER}
@@ -89,5 +115,9 @@
       module_id = #{moduleId,jdbcType=INTEGER},
       actionkey = #{actionkey,jdbcType=VARCHAR}
     where method_id = #{methodId,jdbcType=INTEGER}
+  </update>
+
+  <update id="truncate">
+    truncate TABLE t_method
   </update>
 </mapper>

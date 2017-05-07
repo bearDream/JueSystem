@@ -4,6 +4,8 @@ import com.beardream.model.Method;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @Component
 public interface MethodMapper {
@@ -15,7 +17,11 @@ public interface MethodMapper {
 
     Method selectByPrimaryKey(Integer methodId);
 
+    List<Method> selectBySelective(Method method);
+
     int updateByPrimaryKeySelective(Method record);
 
     int updateByPrimaryKey(Method record);
+
+    int truncate();
 }

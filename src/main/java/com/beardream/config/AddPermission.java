@@ -65,6 +65,8 @@ public class AddPermission {
 
     //扫描controller包下面的所有方法
     public void scanner(ModuleMapper moduleMap, MethodMapper methodMapper){
+        moduleMap.truncate();
+        methodMapper.truncate();
         List<Class<? extends RestController>> controllerClasses = ClassSearcher.of(RestController.class)
                 .includeAllJarsInLib(includeAllJarsInLib).injars(includeJars).search();
         PermissionModule permissionController = null;

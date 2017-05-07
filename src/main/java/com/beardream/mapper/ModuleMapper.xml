@@ -16,6 +16,28 @@
     from t_module
     where module_id = #{moduleId,jdbcType=INTEGER}
   </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_module
+    <where>
+      <if test="moduleId != null">
+        and module_id = #{moduleId}
+      </if>
+      <if test="moduleName != null">
+        and module_name = #{moduleName}
+      </if>
+      <if test="moduleContent != null">
+        and module_content = #{moduleContent}
+      </if>
+      <if test="controllerkey != null">
+        and controllerkey = #{controllerkey}
+      </if>
+    </where>
+    order by module_id asc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_module
     where module_id = #{moduleId,jdbcType=INTEGER}
@@ -78,5 +100,9 @@
       module_content = #{moduleContent,jdbcType=VARCHAR},
       controllerkey = #{controllerkey,jdbcType=VARCHAR}
     where module_id = #{moduleId,jdbcType=INTEGER}
+  </update>
+
+  <update id="truncate">
+    truncate TABLE t_module
   </update>
 </mapper>
