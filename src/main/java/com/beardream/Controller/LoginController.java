@@ -5,17 +5,12 @@ import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.model.User;
 import com.beardream.service.LoginService;
-import com.beardream.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by soft01 on 2017/4/28.
@@ -50,6 +45,16 @@ public class LoginController {
 
     @PostMapping("/isLogin")
     public Object isLogin(HttpSession session){
+        System.out.println(session.getAttribute(Constants.USER));
+        if (session.getAttribute(Constants.USER) == null){
+            return ResultUtil.success(-1,"未登录");
+        }else {
+            return ResultUtil.success("已登录");
+        }
+    }
+
+    @GetMapping("/isLogin")
+    public Object isLoginGet(HttpSession session){
         System.out.println(session.getAttribute(Constants.USER));
         if (session.getAttribute(Constants.USER) == null){
             return ResultUtil.success(-1,"未登录");

@@ -6,4 +6,7 @@ package com.beardream.Utils;
 public class Constants {
 
     public final static String USER = "user";
+
+    //登录的url
+    public final static String LOGIN_URL = "/login";
 }

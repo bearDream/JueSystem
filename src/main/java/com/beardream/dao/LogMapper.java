@@ -1,7 +1,11 @@
 package com.beardream.dao;
 
 import com.beardream.model.Log;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
+@Mapper
+@Repository
 public interface LogMapper {
     int deleteByPrimaryKey(Integer logId);
 

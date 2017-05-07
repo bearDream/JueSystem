@@ -7,6 +7,7 @@ public enum ResultEnum {
     SUCCESS(0,"成功"),
     ERROR(-1,"未知错误"),
     Black_USERNAME(100,"你已被列入黑名单，不允许创建账户"),
+    Logout(-2,"未登录");
     ;
 
     private int code;

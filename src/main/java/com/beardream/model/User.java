@@ -35,6 +35,8 @@ public class User {
 
     private Byte level;
 
+    private Integer roleId;
+
     public Integer getUserId() {
         return userId;
     }
@@ -169,5 +171,13 @@ public class User {
 
     public void setLevel(Byte level) {
         this.level = level;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 }
