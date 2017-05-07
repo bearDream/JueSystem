@@ -21,7 +21,6 @@ import java.util.regex.Pattern;
  * Created by soft01 on 2017/4/28.
  * 登陆控制器
  */
-@EnableAutoConfiguration
 @RestController
 @RequestMapping("/login")
 public class LoginController {

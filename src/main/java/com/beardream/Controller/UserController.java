@@ -24,7 +24,6 @@ import java.util.List;
  * Created by soft01 on 2017/4/17.
  * 用户控制器
  */
-@EnableAutoConfiguration
 @RestController
 @RequestMapping("/user")
 @Api(value = "用户服务",description = "提供RESTful风格API的用户的增改查服务")
