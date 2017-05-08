@@ -17,6 +17,38 @@
     from t_nutrition
     where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
   </select>
+
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_nutrition
+    <where>
+      <if test="nutritionId != null">
+        and nutrition_id = #{nutritionId,jdbcType=INT}
+      </if>
+      <if test="nutritionName != null">
+        and nutrition_name = #{nutritionName,jdbcType=VARCHAR}
+      </if>
+      <if test="nutritionContent != null">
+        and nutrition_content = #{nutritionContent,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="nutritionYxbz != null">
+        and nutrition_yxbz = #{nutritionYxbz,jdbcType=TINYINT}
+      </if>
+      <if test="nutritionType != null">
+        and nutrition_type = #{nutritionType,jdbcType=TINYINT}
+      </if>
+      <if test="promission != null">
+        and promission = #{promission,jdbcType=LONGVARCHAR}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_nutrition
     where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
