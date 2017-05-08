@@ -1,12 +1,17 @@
 package com.beardream.Controller;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.dao.DishMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
+import com.beardream.model.Dish;
+import com.beardream.model.DishBusiness;
 import com.beardream.model.Result;
 import com.beardream.model.User;
+import com.beardream.service.DishService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +26,17 @@ import org.springframework.web.bind.annotation.*;
 @PermissionModule(text = "菜品管理")
 public class DishController {
 
+    @Autowired
+    private DishMapper dishMapper;
+
+    @Autowired
+    private DishService mDishService;
+
     @ApiOperation("获取单个菜品信息")
     @GetMapping
     @PermissionMethod(text = "获取菜品信息")
-    public Result get(User user, BindingResult bindingResult){
-        System.out.println("this is dish/get/");
+    public Result get(Dish dish, BindingResult bindingResult){
+        System.out.println(dish.getDishId());
         return ResultUtil.success("请求GetMapping成功");
     }
 

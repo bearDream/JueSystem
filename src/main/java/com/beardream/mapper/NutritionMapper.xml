@@ -24,26 +24,20 @@
     <include refid="Base_Column_List" />
     from t_nutrition
     <where>
-      <if test="nutritionId != null">
-        and nutrition_id = #{nutritionId,jdbcType=INT}
+      <if test="nurtritionId != null">
+        and nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
       </if>
-      <if test="nutritionName != null">
-        and nutrition_name = #{nutritionName,jdbcType=VARCHAR}
+      <if test="grease != null">
+        and grease = #{grease,jdbcType=VARCHAR}
       </if>
-      <if test="nutritionContent != null">
-        and nutrition_content = #{nutritionContent,jdbcType=VARCHAR}
+      <if test="heat != null">
+        and heat = #{heat,jdbcType=VARCHAR}
+      </if>
+      <if test="sugarContent != null">
+        and sugarContent = #{sugarContent,jdbcType=TIMESTAMP}
       </if>
       <if test="addTime != null">
         and add_time = #{addTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="nutritionYxbz != null">
-        and nutrition_yxbz = #{nutritionYxbz,jdbcType=TINYINT}
-      </if>
-      <if test="nutritionType != null">
-        and nutrition_type = #{nutritionType,jdbcType=TINYINT}
-      </if>
-      <if test="promission != null">
-        and promission = #{promission,jdbcType=LONGVARCHAR}
       </if>
     </where>
     order by add_time desc

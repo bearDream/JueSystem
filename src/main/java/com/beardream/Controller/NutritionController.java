@@ -43,7 +43,7 @@ public class NutritionController {
 
     @ApiOperation("添加营养价值")
     @PostMapping
-    public Result add(Nutrition nutrition){
+    public Result post(Nutrition nutrition){
         System.out.println(nutrition.getNurtritionId());
         return ResultUtil.success(mNutritionService.add(nutrition));
     }
@@ -57,14 +57,8 @@ public class NutritionController {
 
     @ApiOperation("更新营养价值")
     @PutMapping
-    public Result update(Nutrition nutrition){
-        int result;
+    public Result put(Nutrition nutrition) {
         System.out.println(nutrition.getNurtritionId());
-        nutrition.setAddTime(new Date());
-        result = nutritionMapper.updateByPrimaryKeySelective(nutrition);
-        if (result > 0)
-            return ResultUtil.success("更新成功");
-        else
-            return ResultUtil.error(-1,"更新失败");
+        return ResultUtil.success(mNutritionService.put(nutrition));
     }
 }
