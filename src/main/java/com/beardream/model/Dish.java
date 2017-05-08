@@ -52,4 +52,6 @@ public class Dish {
     public void setDishContent(String dishContent) {
         this.dishContent = dishContent == null ? null : dishContent.trim();
     }
+
+
 }

@@ -37,30 +37,30 @@ public class DishController {
     @PermissionMethod(text = "获取菜品信息")
     public Result get(Dish dish, BindingResult bindingResult){
         System.out.println(dish.getDishId());
-        return ResultUtil.success("请求GetMapping成功");
+        return ResultUtil.success(mDishService.find(dish));
     }
 
     @ApiOperation("添加菜品")
     @PostMapping
     @PermissionMethod(text = "添加菜品信息")
-    public Result add(){
-        System.out.println("this is dish/postMAPPING/");
-        return ResultUtil.success("请求postMAPPING成功");
+    public Result post(Dish dish){
+        System.out.println(dish.getDishId());
+        return ResultUtil.success(mDishService.add(dish));
     }
 
     @ApiOperation("删除菜品")
     @DeleteMapping
     @PermissionMethod(text = "删除菜品")
-    public Result delete(){
-        System.out.println("this is dish/postMAPPING/");
-        return ResultUtil.success("请求DeleteMapping成功");
+    public Result delete(Dish dish){
+        System.out.println(dish.getDishId());
+        return ResultUtil.success(mDishService.delete(dish));
     }
 
     @ApiOperation("更新菜品")
     @PutMapping
     @PermissionMethod(text = "更新菜品信息")
-    public Result update(){
-        System.out.println("this is dish/postMAPPING/");
-        return ResultUtil.success("请求PutMapping成功");
+    public Result update(Dish dish){
+        System.out.println(dish.getDishId());
+        return ResultUtil.success(mDishService.put(dish));
     }
 }

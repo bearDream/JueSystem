@@ -16,6 +16,29 @@
   <sql id="Blob_Column_List">
     dish_content
   </sql>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_nutrition
+    <where>
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="dishName != null">
+        and dish_name = #{dishName,jdbcType=VARCHAR}
+      </if>
+      <if test="dishContent != null">
+        and dish_content = #{dishContent}
+      </if>
+      <if test="dishDesc != null">
+        and dish_desc = #{dishDescContent,jdbcType=TIMESTAMP}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
