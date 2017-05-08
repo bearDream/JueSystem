@@ -77,7 +77,7 @@ public class LogAspect {
         String username = "";
         //如果username没有则去电话号码做标识，否则用用户名做标识
         username = (user.getUsername()==null) ? user.getTel() : user.getUsername();
-        log.setLogContent(username+"于"+new Date()+"操作了"+"方法");
+        log.setLogContent(username+"于"+new Date()+"操作了"+ request.getRequestURI() +"方法");
         log.setControllerkey(request.getRequestURI());
         log.setUserId(user.getUserId());
 

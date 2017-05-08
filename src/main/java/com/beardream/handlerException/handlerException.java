@@ -1,6 +1,7 @@
 package com.beardream.handlerException;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.exception.PermissionException;
 import com.beardream.exception.UserException;
 import com.beardream.model.Result;
 import com.beardream.model.User;
@@ -25,6 +26,9 @@ public class handlerException {
         if(e instanceof UserException){
             UserException userException = (UserException) e;
             return ResultUtil.error(userException.getCode(),userException.getMessage());
+        }else if(e instanceof PermissionException){
+            PermissionException permissionException = (PermissionException) e;
+            return ResultUtil.error(permissionException.getCode(),permissionException.getMessage());
         }else {
             logger.error("异常={}",e);
             return ResultUtil.error(-1,"系统错误");

@@ -1,6 +1,8 @@
 package com.beardream.Controller;
 
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
+import com.beardream.Utils.TextUtil;
 import com.beardream.dao.MethodMapper;
 import com.beardream.dao.ModuleMapper;
 import com.beardream.dao.RoleMapper;
@@ -8,15 +10,20 @@ import com.beardream.ioc.Log;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by soft01 on 2017/5/7.
@@ -32,6 +39,9 @@ public class AuthorityController {
 
     @Autowired
     private MethodMapper mMethodMapper;
+
+    @Autowired
+    private RoleMapper mRoleMapper;
 
     /*
         查看所有权限，一个module对应多个method
@@ -50,38 +60,84 @@ public class AuthorityController {
             AuthorityTree authorityTree = new AuthorityTree();
             authorityTree.setModuleName(modules1.getModuleName());
             authorityTree.setControllerKey(modules1.getControllerkey());
-            System.out.println("模块名："+modules1.getModuleName());
+//            System.out.println("模块名："+modules1.getModuleName());
             Method method = new Method();
             method.setModuleId(modules1.getModuleId());
             List<Method> methodsList = new ArrayList<>();
             List<Method> methods = mMethodMapper.selectBySelective(method);
             for (Method method1 : methods){
-                System.out.println("方法名："+method1.getMethodName());
+//                System.out.println("方法名："+method1.getMethodName());
                 methodsList.add(method1);
             }
             authorityTree.setMethod(methodsList);
             authorityTrees.add(authorityTree);
         }
-//        for ()
         return ResultUtil.success(authorityTrees);
     }
 
     /*
-        Put更新数据的请求只能是参数形式，不能写在body中
+        Post更新数据的请求只能是参数形式，不能写在body中
+        参数信息应该按照如下格式：
+    {"code":"1","msg":"权限设置","data":[{
+      "controllerKey": "/authority",
+      "moduleName": "权限管理",
+      "method": [
+        {
+          "methodId": 1,
+          "methodName": "查看所有权限",
+          "methodContent": null,
+          "moduleId": 1,
+          "actionkey": "/authority/get"
+        },
+        {
+          "methodId": 2,
+          "methodName": "设置权限",
+          "methodContent": null,
+          "moduleId": 1,
+          "actionkey": "/authority/update"
+        }
+      ]
+    }]
+    }]}
      */
-    @ApiOperation("设置权限")
-    @PutMapping
+    @ApiOperation("设置权限 格式为{\"code\":\"1\",\"msg\":\"1\",\"data\":[{}]}")
+    @PostMapping
     @Log
     @PermissionMethod(text = "设置权限")
-    public Result update(Role role){
-//        int result;
-//        System.out.println(role.getRoleId());
-//        role.setAddTime(new Date());
-//        result = roleMapper.updateByPrimaryKeySelective(role);
-//        if (result > 0)
-//            return ResultUtil.success("更新成功");
-//        else
-        return ResultUtil.error(-1,"更新失败");
+    public Result post(@RequestBody Result result){
+
+        StringBuilder promission = new StringBuilder();
+        System.out.println(result.getCode());
+        Gson gson = new Gson();
+        result.setData(gson.toJson(result.getData()));
+        System.out.println(result.getData());
+
+        Map<String, Class> beanMap = new HashMap<String, Class>();
+        beanMap.put("method", Method.class);
+
+        JSONArray jsonArray = JSONArray.fromObject(result.getData());
+
+        List<AuthorityTree> authoritylist = (List) JSONArray.toList(jsonArray, AuthorityTree.class, beanMap);
+        for (AuthorityTree authorityTree : authoritylist){
+            System.out.println(authorityTree.getControllerKey());
+            for (int i = 0 ; i < authorityTree.getMethod().size() ; i++){
+                promission.append(authorityTree.getMethod().get(i).getActionkey()).append(",");
+            }
+        }
+        //去除最后一个逗号
+        promission = new StringBuilder(promission.substring(0,promission.length()-1));
+        System.out.println(promission.toString());
+        if (TextUtil.isBlank(result.getMsg())){
+            return ResultUtil.error(-1, "roleId不能为空","更新失败");
+        }
+        Role role = new Role();
+        role.setPromission(promission.toString());
+        role.setRoleId(Integer.parseInt(result.getMsg()));
+        if(mRoleMapper.updateByPrimaryKeySelective(role) != 0){
+            return ResultUtil.success("更新成功");
+        }else {
+            return ResultUtil.error(-1,"更新失败");
+        }
     }
 
 }

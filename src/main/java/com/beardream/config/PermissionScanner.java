@@ -23,7 +23,6 @@ public class PermissionScanner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         //扫描所有controller，注册权限模块和方法
         new AddPermission().scanner(moduleMap, methodMapper);
-        System.out.println("扫描了所有controller，项目启动了！");
     }
 
 }

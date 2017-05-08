@@ -4,6 +4,8 @@ import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.exception.UserException;
 import com.beardream.ioc.Log;
+import com.beardream.ioc.PermissionMethod;
+import com.beardream.ioc.PermissionModule;
 import com.beardream.model.Result;
 import com.beardream.model.User;
 import com.beardream.service.UserService;
@@ -27,14 +29,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @Api(value = "用户服务",description = "提供RESTful风格API的用户的增改查服务")
+@PermissionModule(text = "用户管理")
 public class UserController {
 
     @Autowired
     UserService userService;
 
     @Log
-    @GetMapping("/get")
+    @GetMapping
     @ApiOperation("查找用户")
+    @PermissionMethod(text = "获取用户信息")
     public Result get(@RequestParam(value = "user_id", required = true) int user_id) throws Exception {
         System.out.println(user_id);
         User user = new User();
@@ -45,6 +49,7 @@ public class UserController {
 
     @PostMapping()
     @ApiOperation("添加/注册用户")
+    @PermissionMethod(text = "添加用户信息")
     public Object register(@Valid User user, BindingResult bindingResult) throws Exception {
         System.out.println(user.getTel());
         if (userService.check(user)){
@@ -60,6 +65,7 @@ public class UserController {
 
     @PutMapping()
     @ApiOperation("修改用户")
+    @PermissionMethod(text = "更新用户信息")
     public Object alter(User user, BindingResult bindingResult){
 
         return ResultUtil.error(-1,"修改信息失败");
