@@ -50,4 +50,15 @@ public class Method {
     public void setActionkey(String actionkey) {
         this.actionkey = actionkey == null ? null : actionkey.trim();
     }
+
+    @Override
+    public String toString() {
+        return "Method{" +
+                "methodId=" + methodId +
+                ", methodName='" + methodName + '\'' +
+                ", methodContent='" + methodContent + '\'' +
+                ", moduleId=" + moduleId +
+                ", actionkey='" + actionkey + '\'' +
+                '}';
+    }
 }

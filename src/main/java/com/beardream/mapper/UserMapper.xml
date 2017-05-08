@@ -19,10 +19,11 @@
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
   </resultMap>
   <sql id="Base_Column_List">
     user_id, username, password, tel, real_name, age, sex, id_card, bank_card, address, 
-    weixin, openid, logins, alipay, status, type, level
+    weixin, openid, logins, alipay, status, type, level, role_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select

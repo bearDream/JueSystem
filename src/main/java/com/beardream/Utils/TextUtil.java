@@ -125,6 +125,10 @@ public class TextUtil {
         return new String(toArray, 0, j);
     }
 
+    public static String toLowerStr(String string){
+        return string.toLowerCase();
+    }
+
     public static String join(String[] stringArray) {
         StringBuilder sb = new StringBuilder();
         for (String s : stringArray) {

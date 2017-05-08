@@ -31,6 +31,15 @@ public class ResultUtil {
         Result result = new Result();
         result.setCode(code);
         result.setMsg(msg);
+        result.setData(null);
+        return result;
+    }
+
+    public final static Result error(Integer code, String msg, Object data){
+        Result result = new Result();
+        result.setCode(code);
+        result.setMsg(msg);
+        result.setData(data);
         return result;
     }
 }

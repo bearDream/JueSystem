@@ -91,7 +91,7 @@ public class AddPermission {
                         m.setMethodName(permissionMethod.text());
                         m.setActionkey(controllerKey(controller) + methodKey(method.getName()));
                         m.setModuleId(module.getModuleId());
-                        System.out.println(methodMapper.insertSelective(m));
+                        methodMapper.insertSelective(m);
                     }
                 }
             }
