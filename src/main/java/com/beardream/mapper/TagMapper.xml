@@ -12,11 +12,35 @@
     tag_id, name, content, tag_type, add_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_tag
     where tag_id = #{tagId,jdbcType=INTEGER}
   </select>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_tag
+    <where>
+      <if test="tagId != null">
+        and tag_id = #{tagId,jdbcType=INTEGER}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="tagType != null">
+        and tag_type = #{tagType,jdbcType=TINYINT}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    ORDER  by add_time DESC
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_tag
     where tag_id = #{tagId,jdbcType=INTEGER}
