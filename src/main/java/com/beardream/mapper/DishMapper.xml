@@ -19,7 +19,7 @@
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
-    from t_nutrition
+    from t_dish
     <where>
       <if test="dishId != null">
         and dish_id = #{dishId,jdbcType=INTEGER}
@@ -31,7 +31,7 @@
         and dish_content = #{dishContent}
       </if>
       <if test="dishDesc != null">
-        and dish_desc = #{dishDescContent,jdbcType=TIMESTAMP}
+        and dish_desc = #{dishDescContent,jdbcType=VARCHAR}
       </if>
       <if test="addTime != null">
         and add_time = #{addTime,jdbcType=TIMESTAMP}

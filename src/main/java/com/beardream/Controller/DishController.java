@@ -45,7 +45,7 @@ public class DishController {
     @PermissionMethod(text = "添加菜品信息")
     public Result post(Dish dish){
         System.out.println(dish.getDishId());
-        return ResultUtil.success(mDishService.add(dish));
+        return ResultUtil.success(mDishService.post(dish));
     }
 
     @ApiOperation("删除菜品")
@@ -59,7 +59,7 @@ public class DishController {
     @ApiOperation("更新菜品")
     @PutMapping
     @PermissionMethod(text = "更新菜品信息")
-    public Result update(Dish dish){
+    public Result put(Dish dish){
         System.out.println(dish.getDishId());
         return ResultUtil.success(mDishService.put(dish));
     }

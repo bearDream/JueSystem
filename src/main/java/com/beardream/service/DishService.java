@@ -26,7 +26,7 @@ public class DishService {
         return dishList;
     }
 
-    public String add(Dish dish){
+    public String post(Dish dish){
         int result;
         dish.setAddTime(new Date());
         result = dishMapper.insertSelective(dish);
