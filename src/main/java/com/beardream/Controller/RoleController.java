@@ -11,6 +11,7 @@ import com.beardream.ioc.PermissionModule;
 import com.beardream.model.Result;
 import com.beardream.model.Role;
 import com.beardream.model.User;
+import com.beardream.service.RoleService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -41,6 +42,9 @@ public class RoleController {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Autowired
+    private RoleService mRoleService;
+
     /*
         Put更新数据的请求只能是参数形式，不能写在body中
      */
@@ -50,8 +54,7 @@ public class RoleController {
     @PermissionMethod(text = "查看角色")
     public Result get(Role role, BindingResult bindingResult){
         System.out.println(role.getRoleId());
-        List<Role> roles = roleMapper.findBySelective(role);
-        return ResultUtil.success(roles);
+        return ResultUtil.success(mRoleService.findRole(role));
     }
 
     /*
@@ -62,15 +65,11 @@ public class RoleController {
     @Log
     public Result add(Role role){
         int result;
-        List<Role> exit = roleMapper.findBySelective(role);
-        if (exit.size() > 0)
-            return ResultUtil.error(-1,"该角色已存在");
-        role.setAddTime(new Date());
-        result = roleMapper.insertSelective(role);
+        result = mRoleService.addRole(role);
         if (result > 0)
             return ResultUtil.success("添加成功");
         else
-            return ResultUtil.error(-1,"添加失败");
+            return ResultUtil.error(-1,"该角色已存在");
     }
 
     /*
@@ -81,7 +80,7 @@ public class RoleController {
     @Log
     public Result delete(Role role){
         int result;
-        result = roleMapper.deleteByPrimaryKey(role.getRoleId());
+        result = mRoleService.deleteRole(role);
         if (result > 0)
             return ResultUtil.success("删除成功");
         else
@@ -97,9 +96,7 @@ public class RoleController {
     @Log
     public Result update(Role role){
         int result;
-        System.out.println(role.getRoleId());
-        role.setAddTime(new Date());
-        result = roleMapper.updateByPrimaryKeySelective(role);
+        result = mRoleService.updateRole(role);
         if (result > 0)
             return ResultUtil.success("更新成功");
         else
