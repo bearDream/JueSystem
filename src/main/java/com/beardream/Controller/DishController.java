@@ -70,7 +70,7 @@ public class DishController {
     @ApiOperation("分页获取角色")
     @GetMapping("/getpage")
     @com.beardream.ioc.Log
-    public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Role role, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
 //        System.out.println(role.getRoleId());
         System.out.println(pageNum);
         System.out.println(pageSize);

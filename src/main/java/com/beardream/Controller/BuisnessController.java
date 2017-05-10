@@ -1,14 +1,14 @@
 package com.beardream.Controller;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.Utils.TextUtil;
 import com.beardream.dao.BusinessMapper;
 import com.beardream.dao.RoleMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
-import com.beardream.model.Business;
-import com.beardream.model.Result;
-import com.beardream.model.Role;
-import com.beardream.model.User;
+import com.beardream.model.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by laxzh on 2017/5/6.
@@ -34,8 +36,7 @@ public class BuisnessController {
     @ApiOperation("获取单个商家信息")
     @GetMapping
     @PermissionMethod(text = "获取商家信息")
-    public Result get(Business
-                                  business, BindingResult bindingResult) {
+    public Result get(Business business, BindingResult bindingResult) {
             System.out.println(business.getBusinessId());
             return ResultUtil.success(businessMapper.findBySelective(business));
         }
@@ -82,5 +83,25 @@ public class BuisnessController {
             return ResultUtil.success("修改成功");
         else
             return  ResultUtil.error(-1,"修改失败");
+    }
+
+    @ApiOperation("分页获取商家信息")
+    @GetMapping("/getpage")
+    @com.beardream.ioc.Log
+    public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+        System.out.println(pageNum);
+        System.out.println(pageSize);
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        List<Business> businesses =businessMapper.findBySelective(new Business());
+        PageInfo page = new PageInfo(businesses);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        map.put("list",businesses);
+        return ResultUtil.success(map);
     }
 }
