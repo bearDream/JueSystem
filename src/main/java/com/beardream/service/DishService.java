@@ -1,8 +1,8 @@
 package com.beardream.service;
 
+import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.DishMapper;
 import com.beardream.model.Dish;
-import com.beardream.model.Nutrition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,11 @@ public class DishService {
 
     public String post(Dish dish){
         int result;
+        if (dish==null)
+            return "没有参数";
+        List<Dish> dishList = dishMapper.findBySelective(dish);
+        if (dishList.size()>0)
+            return "菜品已存在";
         dish.setAddTime(new Date());
         result = dishMapper.insertSelective(dish);
         if (result>0){
