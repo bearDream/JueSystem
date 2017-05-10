@@ -27,6 +27,25 @@
     from t_log
     where log_id = #{logId,jdbcType=INTEGER}
   </select>
+
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_log
+    <where>
+      <if test="logId != null">
+        and log_id = #{logId,jdbcType=INT}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=INT}
+      </if>
+      <if test="logAddtime != null">
+        and log_addtime = #{logAddtime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by log_addtime desc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_log
     where log_id = #{logId,jdbcType=INTEGER}
