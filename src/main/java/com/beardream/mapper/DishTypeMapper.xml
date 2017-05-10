@@ -18,6 +18,35 @@
     from t_dish_type
     where dishtype_id = #{dishtypeId,jdbcType=INTEGER}
   </select>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_dish_type
+    <where>
+      <if test="dishtypeId != null">
+        and dishtype_id = #{dishtypeId,jdbcType=INTEGER}
+      </if>
+      <if test="typeName != null">
+        and type_name = #{typeName,jdbcType=VARCHAR}
+      </if>
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow!= null">
+        and is_show = #{isShow,jdbcType=INTEGER}
+      </if>
+      <if test="addTime != null">
+        and business_image = #{businessImage,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow != null">
+        and is_show = #{isShow,jdbcType=TINYINT}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dish_type
     where dishtype_id = #{dishtypeId,jdbcType=INTEGER}
