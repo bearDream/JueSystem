@@ -31,6 +31,12 @@
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
 
+  <!-- 用户的列 -->
+  <sql id="User_Column_List">
+    user_id, username, tel
+  </sql>
+
+
   <sql id="Base_Column_List">
     log_id, log_addtime, actionkey, log_content, controllerkey, user_id, log_ip
   </sql>
