@@ -89,7 +89,7 @@ public class DishTypeController {
     @ApiOperation("分页获取菜品种类")
     @GetMapping("/getpage")
     @com.beardream.ioc.Log
-    public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(DishType dishType, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
 //        System.out.println(role.getRoleId());
         System.out.println(pageNum);
         System.out.println(pageSize);

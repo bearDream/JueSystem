@@ -61,10 +61,10 @@ public class NutritionController {
         return ResultUtil.success(mNutritionService.put(nutrition));
     }
 
-    @ApiOperation("分页获取角色")
+    @ApiOperation("分页获取营养价值------")
     @GetMapping("/getpage")
     @com.beardream.ioc.Log
-    public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Nutrition nutrition, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
 //        System.out.println(role.getRoleId());
         System.out.println(pageNum);
         System.out.println(pageSize);
