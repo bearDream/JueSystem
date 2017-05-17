@@ -36,7 +36,7 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @ApiOperation("获取单个标签")
+    @ApiOperation("获取标签分页")
     @GetMapping
     @PermissionMethod(text = "获取标签信息")
     public Result get(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){
