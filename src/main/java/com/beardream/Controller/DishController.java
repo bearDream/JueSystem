@@ -35,12 +35,14 @@ public class DishController {
     @Autowired
     private DishService mDishService;
 
-    @ApiOperation("获取单个菜品信息")
-    @GetMapping
-    @PermissionMethod(text = "获取菜品信息")
-    public Result get(Dish dish, BindingResult bindingResult){
-        System.out.println(dish.getDishId());
-        return ResultUtil.success(mDishService.find(dish));
+    @ApiOperation("分页获取菜品")
+    @GetMapping("/getpage")
+    @com.beardream.ioc.Log
+    public Result getPage(Dish dish, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult) {
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+        }
+        return ResultUtil.success(mDishService.getPage(pageNum,pageSize));
     }
 
     @ApiOperation("添加菜品")
@@ -67,23 +69,5 @@ public class DishController {
         return ResultUtil.success(mDishService.put(dish));
     }
 
-    @ApiOperation("分页获取菜品")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
-    public Result getPage(Dish dish, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
 
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Dish> dishs =dishMapper.findBySelective(new Dish());
-        PageInfo page = new PageInfo(dishs);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        return ResultUtil.success(map);
-    }
 }

@@ -25,12 +25,6 @@ public class DishService {
     @Autowired
     public DishMapper dishMapper;
 
-    public List find(Dish dish){
-        System.out.println(dishMapper.selectByPrimaryKey(1));
-        List<Dish> dishList = dishMapper.findBySelective(dish);
-        return dishList;
-    }
-
     public String post(Dish dish){
         int result;
         if (dish==null)
@@ -68,7 +62,17 @@ public class DishService {
         }
     }
 
-
+    public Result getPage(int pageNum,int pageSize){
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        List<Dish> dishs =dishMapper.findBySelective(new Dish());
+        PageInfo page = new PageInfo(dishs);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        //map.put("list",dishs);
+        return ResultUtil.success(map);
+    }
 }
+
 
 

@@ -7,6 +7,7 @@ import com.beardream.dao.DishTypeMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
+import com.beardream.service.DishTypeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -33,13 +34,17 @@ public class DishTypeController {
     @Autowired
     private DishTypeMapper dishTypeMapper;
 
-    @ApiOperation("获取单个菜品分类信息")
-    @GetMapping
-    @PermissionMethod(text = "获取菜品分类信息")
+    @Autowired
+    private DishTypeService dishTypeService;
 
-    public Result get(DishType dishType, BindingResult bindingResult){
-        System.out.println(dishType.getDishtypeId());
-        return ResultUtil.success(dishTypeMapper.findBySelective(dishType));
+    @ApiOperation("分页获取菜品种类")
+    @GetMapping("/getpage")
+    @com.beardream.ioc.Log
+    public Result getPage(DishType dishType, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+            return ResultUtil.success(dishTypeService.getPage(pageNum,pageSize));
     }
 
     @ApiOperation("添加菜品分类")
@@ -86,25 +91,6 @@ public class DishTypeController {
              return ResultUtil.error(-1,"修改失败");
     }
 
-    @ApiOperation("分页获取菜品种类")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
-    public Result getPage(DishType dishType, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
 
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<DishType> dishTypes =dishTypeMapper.findBySelective(new DishType());
-        PageInfo page = new PageInfo(dishTypes);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",dishTypes);
-        return ResultUtil.success(map);
-    }
 }
 

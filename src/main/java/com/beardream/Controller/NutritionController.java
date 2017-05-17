@@ -33,12 +33,18 @@ public class NutritionController {
     private NutritionService mNutritionService;
 
 
-    @ApiOperation("获取单个营养价值")
-    @GetMapping
-    public Result get(Nutrition nutrition, BindingResult bindingResult){
-        System.out.println(nutrition.getNurtritionId());
-        return ResultUtil.success(mNutritionService.find(nutrition));
-}
+    @ApiOperation("分页获取营养价值------")
+    @GetMapping("/getpage")
+    @com.beardream.ioc.Log
+    public Result getPage(Nutrition nutrition, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult) {
+//        System.out.println(role.getRoleId());
+        System.out.println(pageNum);
+        System.out.println(pageSize);
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+        }
+            return ResultUtil.success(mNutritionService.getPage(pageNum,pageSize));
+    }
 
     @ApiOperation("添加营养价值")
     @PostMapping
@@ -61,24 +67,5 @@ public class NutritionController {
         return ResultUtil.success(mNutritionService.put(nutrition));
     }
 
-    @ApiOperation("分页获取营养价值------")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
-    public Result getPage(Nutrition nutrition, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
 
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Nutrition> nutritions =nutritionMapper.findBySelective(new Nutrition());
-        PageInfo page = new PageInfo(nutritions);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",nutritions);
-        return ResultUtil.success(map);
-    }
 }
