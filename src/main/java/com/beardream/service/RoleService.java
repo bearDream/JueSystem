@@ -55,20 +55,16 @@ public class RoleService {
     }
 
     //分页获取角色
-    public Result getPage(int pageNum, int pageSize){
-        System.out.println(pageNum);
-        System.out.println(pageSize);
+    public Map getPage(int pageNum, int pageSize){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+            return null;
         }
-
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<Role> roles =mRoleMapper.findBySelective(new Role());
         PageInfo page = new PageInfo(roles);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-        map.put("list",roles);
-        return ResultUtil.success(map);
+        return map;
     }
 }
