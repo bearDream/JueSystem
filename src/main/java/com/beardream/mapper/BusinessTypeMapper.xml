@@ -24,6 +24,29 @@
     from t_business_type
     where business_type_id = #{businessTypeId,jdbcType=INTEGER}
   </select>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_business_type
+    <where>
+      <if test="businessTypeId != null">
+        and business_type_id = #{businessTypeId,jdbcType=INTEGER}
+      </if>
+      <if test="typeName != null">
+        and type_name = #{typeName,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null">
+        and parent_id = #{parentId,jdbcType=VARCHAR}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=LONGVARCHAR}
+      </if>
+    </where>
+    order by add_time desc
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_business_type
     where business_type_id = #{businessTypeId,jdbcType=INTEGER}

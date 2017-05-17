@@ -52,9 +52,14 @@ public class RoleController {
     @GetMapping
     @Log
     @PermissionMethod(text = "查看角色")
-    public Result get(Role role, BindingResult bindingResult){
+    public Result get(Role role, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize) {
         System.out.println(role.getRoleId());
-        return ResultUtil.success(mRoleService.findRole(role));
+        System.out.println(pageNum);
+        System.out.println(pageSize);
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+        }
+        return ResultUtil.success(mRoleService.getPage(pageNum,pageSize));
     }
 
     /*
@@ -63,13 +68,13 @@ public class RoleController {
     @ApiOperation("添加角色")
     @PostMapping
     @Log
-    public Result add(Role role){
+    public Result add(Role role) {
         int result;
         result = mRoleService.addRole(role);
         if (result > 0)
             return ResultUtil.success("添加成功");
         else
-            return ResultUtil.error(-1,"该角色已存在");
+            return ResultUtil.error(-1, "该角色已存在");
     }
 
     /*
@@ -78,7 +83,7 @@ public class RoleController {
     @ApiOperation("删除角色")
     @DeleteMapping
     @Log
-    public Result delete(Role role){
+    public Result delete(Role role) {
         int result;
         result = mRoleService.deleteRole(role);
         if (result > 0)
@@ -94,18 +99,19 @@ public class RoleController {
     @ApiOperation("更新角色")
     @PutMapping
     @Log
-    public Result update(Role role){
+    public Result update(Role role) {
         int result;
         result = mRoleService.updateRole(role);
         if (result > 0)
             return ResultUtil.success("更新成功");
         else
-            return ResultUtil.error(-1,"更新失败");
+            return ResultUtil.error(-1, "更新失败");
     }
+}
 
     //需要分页
     // 需要两个参数： 当前所在页pageSize 需要几条数据limit
-    @ApiOperation("分页获取角色")
+ /*   @ApiOperation("分页获取角色")
     @GetMapping("/getpage")
     @Log
     public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
@@ -126,3 +132,4 @@ public class RoleController {
         return ResultUtil.success(map);
     }
 }
+*/

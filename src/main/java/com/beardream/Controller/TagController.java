@@ -7,6 +7,7 @@ import com.beardream.dao.TagMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
+import com.beardream.service.TagService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -32,13 +33,20 @@ import java.util.Map;
 public class TagController {
     @Autowired
     private TagMapper tagMapper;
+    @Autowired
+    private TagService tagService;
 
     @ApiOperation("获取单个标签")
     @GetMapping
     @PermissionMethod(text = "获取标签信息")
-    public Result get(Tag tag, BindingResult bindingResult){
+    public Result get(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){
         System.out.println(tag.getTagId());
-        return ResultUtil.success(tagMapper.findBySelective(tag));
+        System.out.println(pageNum);
+        System.out.println(pageSize);
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+        }
+        return ResultUtil.success(tagService.getPage(pageNum, pageSize));
     }
 
     @ApiOperation("添加标签")
@@ -85,25 +93,7 @@ public class TagController {
         else
             return  ResultUtil.error(-1,"更新失败");
     }
-    @ApiOperation("分页获取标签")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
-    public Result getPage(Role role, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
 
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Tag> tags =tagMapper.findBySelective(new Tag());
-        PageInfo page = new PageInfo(tags);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",tags);
-        return ResultUtil.success(map);
-    }
+
 }
 
