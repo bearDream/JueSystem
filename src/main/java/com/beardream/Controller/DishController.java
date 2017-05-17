@@ -84,7 +84,6 @@ public class DishController {
         PageInfo page = new PageInfo(dishs);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-        map.put("list",dishs);
         return ResultUtil.success(map);
     }
 }

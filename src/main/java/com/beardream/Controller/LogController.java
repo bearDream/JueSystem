@@ -28,7 +28,7 @@ import java.util.Map;
  * 日志控制器
  */
 @RestController
-@RequestMapping("/log")
+@RequestMapping("/api/log")
 @Api(value = "日志服务",description = "提供RESTful风格API的日志的增删改查服务")
 @PermissionModule(text = "日志管理")
 public class LogController {
@@ -54,7 +54,7 @@ public class LogController {
     //需要分页
     // 需要两个参数： 当前所在页pageSize 需要几条数据limit
     @ApiOperation("分页获取角色")
-    @GetMapping("/getpage")
+    @GetMapping
     @Log
     public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){
 //        System.out.println(role.getRoleId());

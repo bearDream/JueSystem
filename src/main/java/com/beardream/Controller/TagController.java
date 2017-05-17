@@ -27,7 +27,7 @@ import java.util.Map;
  * 标签控制器
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/tag")
 @Api(value = "标签服务",description = "提供RESTful风格API的标签的增删改查服务")
 @PermissionModule(text = "标签管理")
 public class TagController {
@@ -36,7 +36,7 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @ApiOperation("获取单个标签")
+    @ApiOperation("获取标签分页")
     @GetMapping
     @PermissionMethod(text = "获取标签信息")
     public Result get(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){

@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
  * 登陆控制器
  */
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/login")
+@CrossOrigin
 public class LoginController {
 
 //    @Autowired
@@ -31,7 +32,20 @@ public class LoginController {
 
     //user:用户名和密码   model：设备型号
     @PostMapping()
-    public Object login(User user, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
+    public Object loginPost(User user, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
+        System.out.println(user.getTel() + "-----" + user.getPassword() + "-------" );
+        if (session.getAttribute(Constants.USER) != null){
+            System.out.println("已登陆 -->"+session.getAttribute(Constants.USER).toString());
+            return ResultUtil.success(session.getAttribute(Constants.USER).toString());
+        }
+        if (mLoginService.login(user, request, session)){
+            return ResultUtil.success(session.getAttribute(Constants.USER).toString());
+        }
+        return ResultUtil.error(-1,"用户名和密码错误！");
+    }
+
+    @GetMapping()
+    public Object loginGet(User user, BindingResult bindingResult, HttpServletRequest request, HttpSession session){
         System.out.println(user.getTel() + "-----" + user.getPassword() + "-------" );
         if (session.getAttribute(Constants.USER) != null){
             System.out.println("已登陆 -->"+session.getAttribute(Constants.USER).toString());
@@ -47,7 +61,7 @@ public class LoginController {
     public Object isLogin(HttpSession session){
         System.out.println(session.getAttribute(Constants.USER));
         if (session.getAttribute(Constants.USER) == null){
-            return ResultUtil.success(-1,"未登录");
+            return ResultUtil.error(-1,"未登录");
         }else {
             return ResultUtil.success("已登录");
         }
@@ -57,7 +71,7 @@ public class LoginController {
     public Object isLoginGet(HttpSession session){
         System.out.println(session.getAttribute(Constants.USER));
         if (session.getAttribute(Constants.USER) == null){
-            return ResultUtil.success(-1,"未登录");
+            return ResultUtil.error(-1,"未登录");
         }else {
             return ResultUtil.success("已登录");
         }

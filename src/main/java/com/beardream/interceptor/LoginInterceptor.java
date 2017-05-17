@@ -30,8 +30,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             //未登录
             try {
                 out = response.getWriter();
-                out.append(Json.toJson(ResultUtil.error(-2,"未登录")));
-                System.out.println("返回是\n");
+                out.append(Json.toJson(ResultUtil.error(-1,"未登录")));
+                System.out.print("登录状态：");
                 System.out.println(ResultEnum.Logout.toString());
             } catch (IOException e) {
                 e.printStackTrace();

@@ -40,7 +40,7 @@ public class UserService{
             return true;
     }
 
-    public Object get(int userId)throws Exception {
-        return userMapper.selectByPrimaryKey(userId);
+    public Object get(User user)throws Exception {
+        return userMapper.findSelective(user);
     }
 }
