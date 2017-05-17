@@ -76,11 +76,14 @@ public class PathKit {
         PathKit.webRootPath = webRootPath;
     }
 
-    // 注意：命令行返回的是命令行所在路径的上层的上层路径
+    // 注意：打包的是jar包，因此我值需要找到class的目录即可，和普通部署方式不同
     private static String detectWebRootPath() {
         try {
-            String path = PathKit.class.getResource("/").toURI().getPath();
-            return new File(path).getParentFile().getParentFile().getCanonicalPath();
+            String path = PathKit.class.getResource("/").getPath();
+            path = path.substring(5,path.length());// 删除路径前面的file:/
+//            System.out.println("-----------path:  "+path);
+//            System.out.println("-----------getProtectionDomain:  "+PathKit.class.getProtectionDomain().getCodeSource().getLocation().getPath().substring(5,path.length()));
+            return new File(path).getCanonicalPath();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

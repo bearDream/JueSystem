@@ -13,6 +13,24 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Log">
     <result column="params" jdbcType="LONGVARCHAR" property="params" />
   </resultMap>
+  <!-- log表联合user表查询结果集 -->
+  <resultMap id="LogUserResultMap" type="com.beardream.model.Log">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="log_addtime" jdbcType="TIMESTAMP" property="logAddtime" />
+    <result column="actionkey" jdbcType="VARCHAR" property="actionkey" />
+    <result column="log_content" jdbcType="VARCHAR" property="logContent" />
+    <result column="controllerkey" jdbcType="VARCHAR" property="controllerkey" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="log_ip" jdbcType="VARCHAR" property="logIp" />
+    <association property="username" column="username" select="getUser"/>
+    <association property="tel" column="tel" select="getUser"/>
+  </resultMap>
+  <select id="getUser" parameterType="java.lang.Integer" resultType="com.beardream.model.User">
+    select user_id,username,tel
+    from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+
   <sql id="Base_Column_List">
     log_id, log_addtime, actionkey, log_content, controllerkey, user_id, log_ip
   </sql>

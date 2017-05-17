@@ -15,7 +15,7 @@ public class WebAppConfigurer extends WebMvcConfigurerAdapter {
     //添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**").excludePathPatterns(Constants.LOGIN_URL);;
+        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/api/**").excludePathPatterns(Constants.LOGIN_URL);;
         super.addInterceptors(registry);
     }
 

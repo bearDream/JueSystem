@@ -25,4 +25,7 @@ public interface LogMapper {
     int updateByPrimaryKey(Log record);
 
     List<Log> findBySelective(Log role);
+
+    List<Log> findLogUserBySelective(Log role);
+
 }

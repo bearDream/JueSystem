@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
  * 取号控制器
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/api/tag")
 @Api(value = "取号服务",description = "提供RESTful风格API的取号的操作")
 public class TakeNumController {
+
+
 }

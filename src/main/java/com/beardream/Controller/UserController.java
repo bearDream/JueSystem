@@ -27,7 +27,7 @@ import java.util.List;
  * 用户控制器
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @Api(value = "用户服务",description = "提供RESTful风格API的用户的增改查服务")
 @PermissionModule(text = "用户管理")
 public class UserController {
@@ -39,12 +39,8 @@ public class UserController {
     @GetMapping
     @ApiOperation("查找用户")
     @PermissionMethod(text = "获取用户信息")
-    public Result get(@RequestParam(value = "user_id", required = true) int user_id) throws Exception {
-        System.out.println(user_id);
-        User user = new User();
-        user.setUserId(user_id);
-        user.setUsername("小米");
-        return ResultUtil.success(userService.get(user_id));
+    public Result get(User user) throws Exception {
+        return ResultUtil.success(userService.get(user));
     }
 
     @PostMapping()

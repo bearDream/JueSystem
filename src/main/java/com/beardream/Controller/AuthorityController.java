@@ -15,11 +15,7 @@ import com.google.gson.JsonArray;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,7 +25,7 @@ import java.util.*;
  * Created by soft01 on 2017/5/7.
  */
 @RestController
-@RequestMapping("/authority")
+@RequestMapping("/api/authority")
 @Api(value = "权限服务",description = "提供RESTful风格API的权限的增删改查服务")
 @PermissionModule(text = "权限管理")
 public class AuthorityController {

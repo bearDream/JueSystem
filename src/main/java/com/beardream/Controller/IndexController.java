@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RestController
 public class IndexController {
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/api/")
     public String index(){
         return "/";
     }
