@@ -40,9 +40,6 @@ public class BuisnessController {
     @GetMapping
     @PermissionMethod(text = "获取商家信息")
     public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-        System.out.println(business.getBusinessId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
             return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
         }

@@ -40,9 +40,6 @@ public class TagController {
     @GetMapping
     @PermissionMethod(text = "获取标签信息")
     public Result get(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){
-        System.out.println(tag.getTagId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
             return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
         }

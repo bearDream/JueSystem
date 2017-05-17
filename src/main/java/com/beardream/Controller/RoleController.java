@@ -52,9 +52,6 @@ public class RoleController {
     @Log
     @PermissionMethod(text = "查看角色")
     public Result get(Role role, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize) {
-        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
             return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
         }
