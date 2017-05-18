@@ -37,16 +37,12 @@ public class BuisnessController {
     private BusinessService businessService;
 
     @ApiOperation("获取单个商家信息")
-    @GetMapping
+    @GetMapping(value = "/{dishId}")
     @PermissionMethod(text = "获取商家信息")
-    public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
-        }
-        return ResultUtil.success(businessService.getPage(pageNum, pageSize));
+    public Result get(Business business, BindingResult bindingResult){
+        System.out.println(business.getBusinessId());
+        return ResultUtil.success(businessService.find(business));
     }
-
-
     @ApiOperation("添加商家")
     @PostMapping
     @PermissionMethod(text = "添加商家")
@@ -91,23 +87,17 @@ public class BuisnessController {
             return ResultUtil.error(-1, "修改失败");
     }
 
- /*   @ApiOperation("分页获取商家信息")
+  @ApiOperation("分页获取商家信息")
     @GetMapping("/getpage")
     @com.beardream.ioc.Log
- *//*   public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
-
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Business> businesses =businessMapper.findBySelective(new Business());
-        PageInfo page = new PageInfo(businesses);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",businesses);
-        return ResultUtil.success(map);
-    }*/
+  public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+      if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+          return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+      }
+      if (businessService.getPage(business, pageNum,pageSize)!=null)
+          return ResultUtil.success(businessService.getPage(business, pageNum,pageSize));
+      else
+          return ResultUtil.error(-1,"系统错误");
+  }
 }
+

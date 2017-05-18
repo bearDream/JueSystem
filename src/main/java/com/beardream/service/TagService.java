@@ -3,6 +3,7 @@ package com.beardream.service;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.TagMapper;
+import com.beardream.model.Business;
 import com.beardream.model.Result;
 import com.beardream.model.Role;
 import com.beardream.model.Tag;
@@ -33,7 +34,16 @@ public class TagService {
         return mTagMapper.deleteByPrimaryKey(tag.getTagId());
     }
 
-    public Map getPage(int pageNum,int pageSize){
+
+    //获取单个标签信息
+    public List find(Tag tag){
+        System.out.println(mTagMapper.selectByPrimaryKey(1));
+        List<Tag> TagList = mTagMapper.findBySelective(tag);
+        return TagList;
+    }
+
+
+    public Map getPage(Tag tag,int pageNum,int pageSize){
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<Tag> tags =mTagMapper.findBySelective(new Tag());

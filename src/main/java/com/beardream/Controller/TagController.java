@@ -36,15 +36,14 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @ApiOperation("获取标签分页")
+    @ApiOperation("获取单个标签信息")
     @GetMapping
     @PermissionMethod(text = "获取标签信息")
-    public Result get(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
-        }
-        return ResultUtil.success(tagService.getPage(pageNum, pageSize));
+    public Result get(Tag tag, BindingResult bindingResult){
+        System.out.println(tag.getTagId());
+        return ResultUtil.success(tagService.find(tag));
     }
+
 
     @ApiOperation("添加标签")
     @PostMapping
@@ -90,7 +89,18 @@ public class TagController {
         else
             return  ResultUtil.error(-1,"更新失败");
     }
-
+    @ApiOperation("分页获取标签信息")
+    @GetMapping("/getpage")
+    @com.beardream.ioc.Log
+    public Result getPage(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+        if (tagService.getPage(tag, pageNum,pageSize)!=null)
+            return ResultUtil.success(tagService.getPage(tag, pageNum,pageSize));
+        else
+            return ResultUtil.error(-1,"系统错误");
+    }
 
 }
 

@@ -6,6 +6,7 @@ import com.beardream.dao.BusinessTypeMapper;
 import com.beardream.dao.TagMapper;
 import com.beardream.model.BusinessType;
 import com.beardream.model.Result;
+import com.beardream.model.Role;
 import com.beardream.model.Tag;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,11 +28,17 @@ public class BusinessTypeService {
     public BusinessTypeMapper mBusinessTypeMapper;
 
 
+    public List<BusinessType> find(BusinessType businessType) {
+        List<BusinessType> businessTypesList = mBusinessTypeMapper.findBySelective(businessType);
+        return businessTypesList;
+    }
+
+
     public int deleteTag(BusinessType businessType) {
         return mBusinessTypeMapper.deleteByPrimaryKey(businessType.getBusinessTypeId());
     }
 
-    public Map getPage(int pageNum, int pageSize){
+    public Map getPage(BusinessType businessType,int pageNum, int pageSize){
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<BusinessType> businessTypes =mBusinessTypeMapper.findBySelective(new BusinessType());

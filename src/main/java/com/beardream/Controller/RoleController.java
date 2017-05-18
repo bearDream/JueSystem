@@ -10,6 +10,7 @@ import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.Result;
 import com.beardream.model.Role;
+import com.beardream.model.Tag;
 import com.beardream.model.User;
 import com.beardream.service.RoleService;
 import com.github.pagehelper.Page;
@@ -47,15 +48,13 @@ public class RoleController {
     /*
         Put更新数据的请求只能是参数形式，不能写在body中
      */
-    @ApiOperation("获取单个角色")
+    @ApiOperation("获取单个角色信息")
     @GetMapping
     @Log
     @PermissionMethod(text = "查看角色")
     public Result get(Role role, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize) {
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
-        }
-        return ResultUtil.success(mRoleService.getPage(pageNum,pageSize));
+        System.out.println(role.getRoleId());
+        return ResultUtil.success(mRoleService.find(role));
     }
 
     /*
@@ -103,29 +102,18 @@ public class RoleController {
         else
             return ResultUtil.error(-1, "更新失败");
     }
-}
 
-    //需要分页
-    // 需要两个参数： 当前所在页pageSize 需要几条数据limit
- /*   @ApiOperation("分页获取角色")
+
+    @ApiOperation("分页获取角色信息")
     @GetMapping("/getpage")
-    @Log
-    public Result getPage(Role role, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
+    @com.beardream.ioc.Log
+    public Result getPage(Role role, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Role> roles =roleMapper.findBySelective(new Role());
-        PageInfo page = new PageInfo(roles);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",roles);
-        return ResultUtil.success(map);
+        if (mRoleService.getPage(role, pageNum,pageSize)!=null)
+            return ResultUtil.success(mRoleService.getPage(role, pageNum,pageSize));
+        else
+            return ResultUtil.error(-1,"系统错误");
     }
 }
-*/
