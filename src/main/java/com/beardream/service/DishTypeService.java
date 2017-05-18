@@ -24,15 +24,19 @@ public class DishTypeService {
     @Autowired
     private DishTypeMapper dishTypeMapper;
 
-    public Result getPage(int pageNum,int pageSize){
-        //获取第1页，10条内容，默认查询总数count
+    public DishType find(DishType dishType){
+        DishType dishTypeInfo = dishTypeMapper.selectByPrimaryKey(dishType.getDishtypeId());
+        return dishTypeInfo;
+    }
+
+    public Map getPage(DishType dishType, int pageNum,int pageSize){
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<DishType> dishTypes =dishTypeMapper.findBySelective(new DishType());
         PageInfo page = new PageInfo(dishTypes);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-        //map.put("list",dishTypes);
-        return ResultUtil.success(map);
+        return map;
     }
+
 
 }

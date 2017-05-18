@@ -36,14 +36,29 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @ApiOperation("获取单个用户")
+    @GetMapping(value = "/get")
+    @com.beardream.ioc.Log
+    public Object register(@Valid User user) throws Exception {
+        System.out.println(user.getUserId());
+        if (userService.find(user)!=null)
+            return ResultUtil.success(userService.find(user));
+        else
+            return ResultUtil.error(-1,"用户不存在");
+    }
+
+
     @ApiOperation("分页获取用户")
-    @GetMapping("/getpage")
+    @GetMapping
     @com.beardream.ioc.Log
     public Result getPage(User user, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult) {
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
             return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
         }
-        return ResultUtil.success(userService.getPage(pageNum,pageSize));
+        if (userService.getPage(user,pageNum,pageSize)!=null)
+            return ResultUtil.success(userService.getPage(user,pageNum,pageSize));
+        else
+            return ResultUtil.error(-1,"用户不存在");
     }
 
     @PostMapping()

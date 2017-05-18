@@ -37,7 +37,6 @@ public class NutritionService {
     }
 
     public Map getPage(Nutrition nutrition, int pageNum, int pageSize){
-        //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<Nutrition> nutritions =mNutritionMapper.findBySelective(nutrition);
         PageInfo page = new PageInfo(nutritions);

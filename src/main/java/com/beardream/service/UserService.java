@@ -25,8 +25,9 @@ public class UserService{
     @Autowired
     public UserMapper userMapper;
 
-    public List<User> userList()throws Exception{
-        return userMapper.findAll();
+    public User find(User user)throws Exception{
+        User userInfo = userMapper.selectByPrimaryKey(user.getUserId());
+        return  userInfo;
     }
 
     public int save(User user)throws Exception {
@@ -50,14 +51,12 @@ public class UserService{
         return userMapper.findSelective(user);
     }
 
-    public Result getPage(int pageNum, int pageSize){
-        //获取第1页，10条内容，默认查询总数count
+    public Map getPage(User user,int pageNum, int pageSize){
         PageHelper.startPage(pageNum , pageSize).setOrderBy("user_id asc");
         List<User> users =userMapper.findSelective(new User());
         PageInfo page = new PageInfo(users);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-        //map.put("list",dishs);
-        return ResultUtil.success(map);
+        return map;
     }
 }

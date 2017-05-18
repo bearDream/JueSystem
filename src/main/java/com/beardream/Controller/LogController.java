@@ -55,7 +55,7 @@ public class LogController {
 
     //需要分页
     // 需要两个参数： 当前所在页pageSize 需要几条数据limit
-    @ApiOperation("分页获取角色")
+    @ApiOperation("分页获取日志")
     @GetMapping
     @Log
     public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
@@ -66,5 +66,20 @@ public class LogController {
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
         return ResultUtil.success(mLogService.getPage(pageNum, pageSize, logUser));
+    }
+
+    //需要分页
+    // 需要两个参数： 当前所在页pageSize 需要几条数据limit
+    @ApiOperation("获取单条日志记录")
+    @GetMapping("/get")
+    @Log
+    public Result get(LogUser logUser){
+        if (!TextUtil.isEmpty(logUser.getLogId())){
+            return ResultUtil.error(-1,"LogId不能为空！");
+        }
+        if (mLogService.get(logUser) != null)
+            return ResultUtil.success(mLogService.get(logUser));
+        else
+            return ResultUtil.error(-1,"该日志不存在");
     }
 }
