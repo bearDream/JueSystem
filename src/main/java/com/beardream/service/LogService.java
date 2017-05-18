@@ -3,6 +3,7 @@ package com.beardream.service;
 import com.beardream.dao.LogMapper;
 import com.beardream.dao.UserMapper;
 import com.beardream.model.Log;
+import com.beardream.model.LogUser;
 import com.beardream.model.Role;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -29,14 +30,13 @@ public class LogService {
         return mLogMapper.deleteByPrimaryKey(log.getLogId());
     }
 
-    public Map getPage(int pageNum,int pageSize) {
+    public Map getPage(int pageNum,int pageSize, LogUser logUser) {
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("log_addtime asc");
-        List<Log> logs =mLogMapper.findBySelective(new Log());
+        List<LogUser> logs =mLogMapper.findLogUserBySelective(logUser);
         PageInfo page = new PageInfo(logs);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-//        map.put("list",logs);
         return map;
     }
 }

@@ -27,105 +27,81 @@ import java.util.Map;
 /**
  * Created by soft01 on 2017/5/17.
  */
+/**
+ * Created by laxzh on 2017/5/17.
+ * 商家类别控制器
+ */
+@RestController
+@RequestMapping("/api/businesstype")
+@Api(value = "商家分类服务", description = "提供RESTful风格API的商家的增删改查服务")
+@PermissionModule(text = "商家分类管理")
 public class BusinessTypeController {
-    /**
-     * Created by laxzh on 2017/5/17.
-     * 商家类别控制器
-     */
-    @RestController
-    @RequestMapping("/businesstype")
-    @Api(value = "商家分类服务", description = "提供RESTful风格API的商家的增删改查服务")
-    @PermissionModule(text = "商家分类管理")
-    public class DishTypeController {
-        @Autowired
-        private BusinessTypeMapper businessTypeMapper;
-        @Autowired
-        private BusinessTypeService mBusinessTypeService;
+/**
+ * Created by laxzh on 2017/5/17.
+ * 商家类别控制器
+ */
+    @Autowired
+    private BusinessTypeMapper businessTypeMapper;
+    @Autowired
+    private BusinessTypeService mBusinessTypeService;
 
-        @ApiOperation("获取单个菜品分类信息")
-        @GetMapping
-        @PermissionMethod(text = "获取商家分类信息")
-        public Result get(BusinessType businessType, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize, BindingResult bindingResult) {
-            System.out.println(businessType.getBusinessTypeId());
-            System.out.println(pageNum);
-            System.out.println(pageSize);
-            if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-                return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
-            }
-            return ResultUtil.success(mBusinessTypeService.getPage(pageNum, pageSize));
+    @ApiOperation("分页获取菜品分类信息")
+    @GetMapping
+    @PermissionMethod(text = "获取商家分类信息")
+    public Result get(BusinessType businessType, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize, BindingResult bindingResult) {
+        System.out.println(businessType.getBusinessTypeId());
+        System.out.println(pageNum);
+        System.out.println(pageSize);
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
         }
-
-        @ApiOperation("添加商家分类")
-        @PostMapping
-        @PermissionMethod(text = "添加商家分类")
-        public Result post(BusinessType businessType) {
-            int result;
-            if (businessType == null)
-                return ResultUtil.error(-1, "没有参数");
-            List<BusinessType> b = businessTypeMapper.findBySelective(businessType);
-            if (b.size() > 0)
-                return ResultUtil.error(-1, "已存在此种类型！");
-            businessType.setAddTime(new Date());
-            result = businessTypeMapper.insertSelective(businessType);
-            if (result > 0)
-                return ResultUtil.success("成功添加商家分类");
-            else
-                return ResultUtil.error(-1, "添加失败");
-        }
-
-        @ApiOperation("删除商家分类")
-        @DeleteMapping
-        @PermissionMethod(text = "删除商家分类")
-        public Result delete(BusinessType businessType) {
-            int result;
-            result = businessTypeMapper.deleteByPrimaryKey(businessType.getBusinessTypeId());
-            if (result > 0)
-                return ResultUtil.success("删除成功");
-            else
-                return ResultUtil.error(-1, "删除失败");
-        }
-
-        @ApiOperation("更新商家分类")
-        @PutMapping
-        @PermissionMethod(text = "更新商家分类")
-        public Result update(BusinessType businessType) {
-            int result;
-            System.out.println(businessType.getBusinessTypeId());
-            businessType.setAddTime(new Date());
-            result = businessTypeMapper.updateByPrimaryKeySelective(businessType);
-            if (result > 0)
-                return ResultUtil.success("修改成功");
-            else
-                return ResultUtil.error(-1, "修改失败");
-        }
-    }
-}
-/*
-
-        @ApiOperation("分页获取菜品种类")
-        @GetMapping("/getpage")
-        @com.beardream.ioc.Log
-        public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-            System.out.println(pageNum);
-            System.out.println(pageSize);
-            if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-                return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-            }
-
-            //获取第1页，10条内容，默认查询总数count
-            PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-            List<BusinessType> businessTypes =businessTypeMapper.findBySelective(new BusinessType());
-            PageInfo page = new PageInfo(businessTypes);
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("page",page);
-            map.put("list",bindingResult);
-            return ResultUtil.success(map);
-        }
+        return ResultUtil.success(mBusinessTypeService.getPage(pageNum, pageSize));
     }
 
+    @ApiOperation("添加商家分类")
+    @PostMapping
+    @PermissionMethod(text = "添加商家分类")
+    public Result post(BusinessType businessType) {
+        int result;
+        if (businessType == null)
+            return ResultUtil.error(-1, "没有参数");
+        List<BusinessType> b = businessTypeMapper.findBySelective(businessType);
+        if (b.size() > 0)
+            return ResultUtil.error(-1, "已存在此种类型！");
+        businessType.setAddTime(new Date());
+        result = businessTypeMapper.insertSelective(businessType);
+        if (result > 0)
+            return ResultUtil.success("成功添加商家分类");
+        else
+            return ResultUtil.error(-1, "添加失败");
+    }
 
+    @ApiOperation("删除商家分类")
+    @DeleteMapping
+    @PermissionMethod(text = "删除商家分类")
+    public Result delete(BusinessType businessType) {
+        int result;
+        result = businessTypeMapper.deleteByPrimaryKey(businessType.getBusinessTypeId());
+        if (result > 0)
+            return ResultUtil.success("删除成功");
+        else
+            return ResultUtil.error(-1, "删除失败");
+    }
+
+    @ApiOperation("更新商家分类")
+    @PutMapping
+    @PermissionMethod(text = "更新商家分类")
+    public Result update(BusinessType businessType) {
+        int result;
+        System.out.println(businessType.getBusinessTypeId());
+        businessType.setAddTime(new Date());
+        result = businessTypeMapper.updateByPrimaryKeySelective(businessType);
+        if (result > 0)
+            return ResultUtil.success("修改成功");
+        else
+            return ResultUtil.error(-1, "修改失败");
+    }
 }
-*/
+
 
 

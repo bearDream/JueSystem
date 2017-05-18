@@ -7,8 +7,10 @@ import com.beardream.dao.RoleMapper;
 import com.beardream.ioc.Log;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
+import com.beardream.model.LogUser;
 import com.beardream.model.Result;
 import com.beardream.model.Role;
+import com.beardream.model.User;
 import com.beardream.service.LogService;
 import com.beardream.service.RoleService;
 import com.github.pagehelper.PageHelper;
@@ -56,13 +58,13 @@ public class LogController {
     @ApiOperation("分页获取角色")
     @GetMapping
     @Log
-    public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize){
-//        System.out.println(role.getRoleId());
+    public Result getPage(@RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize,
+                          LogUser logUser){
         System.out.println(pageNum);
         System.out.println(pageSize);
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-        return ResultUtil.success(mLogService.getPage(pageNum, pageSize));
+        return ResultUtil.success(mLogService.getPage(pageNum, pageSize, logUser));
     }
 }

@@ -1,6 +1,7 @@
 package com.beardream.dao;
 
 import com.beardream.model.Log;
+import com.beardream.model.LogUser;
 import com.beardream.model.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,7 @@ public interface LogMapper {
 
     List<Log> findBySelective(Log role);
 
-    List<Log> findLogUserBySelective(Log role);
+    // 连接查询日志和用户
+    List<LogUser> findLogUserBySelective(LogUser logUser);
 
 }

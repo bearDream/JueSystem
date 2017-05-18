@@ -1,15 +1,24 @@
 package com.beardream.service;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.Utils.TextUtil;
 import com.beardream.dao.NutritionMapper;
+import com.beardream.model.DishType;
 import com.beardream.model.Nutrition;
 import com.beardream.model.Result;
+import com.beardream.model.Role;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by soft01 on 2017/5/8.
@@ -19,18 +28,28 @@ import java.util.List;
 public class NutritionService {
 
     @Autowired
-    public NutritionMapper nutritionMapper;
+    public NutritionMapper mNutritionMapper;
 
-    public List find(Nutrition nutrition){
-        System.out.println(nutritionMapper.selectByPrimaryKey(1).getGrease());
-        List<Nutrition> nutritionList = nutritionMapper.findBySelective(nutrition);
-        return nutritionList;
+    public Nutrition find(Nutrition nutrition){
+        System.out.println(mNutritionMapper.selectByPrimaryKey(nutrition.getNurtritionId()).getGrease());
+        Nutrition nutritionInfo = mNutritionMapper.selectByPrimaryKey(nutrition.getNurtritionId());
+        return nutritionInfo;
+    }
+
+    public Map getPage(Nutrition nutrition, int pageNum, int pageSize){
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        List<Nutrition> nutritions =mNutritionMapper.findBySelective(nutrition);
+        PageInfo page = new PageInfo(nutritions);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        return map;
     }
 
     public String add(Nutrition nutrition){
         int result;
         nutrition.setAddTime(new Date());
-        result = nutritionMapper.insertSelective(nutrition);
+        result = mNutritionMapper.insertSelective(nutrition);
         if (result>0){
             return "添加成功";
         }else{
@@ -40,7 +59,7 @@ public class NutritionService {
 
     public String delete(Nutrition nutrition){
         int result;
-        result = nutritionMapper.deleteByPrimaryKey(nutrition.getNurtritionId());
+        result = mNutritionMapper.deleteByPrimaryKey(nutrition.getNurtritionId());
         if (result > 0) {
             return "删除成功";
         }else {
@@ -51,7 +70,7 @@ public class NutritionService {
     public String put(Nutrition nutrition){
         int result;
         System.out.println(nutrition.getNurtritionId());
-        result = nutritionMapper.updateByPrimaryKeySelective(nutrition);
+        result = mNutritionMapper.updateByPrimaryKeySelective(nutrition);
         if (result > 0) {
             return "更新成功";
         }else {

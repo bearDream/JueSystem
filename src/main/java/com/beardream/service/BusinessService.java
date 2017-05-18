@@ -42,12 +42,11 @@ public class BusinessService {
     @com.beardream.ioc.Log
     public Map getPage(int pageNum,int pageSize) {
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("log_addtime asc");
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<Business> businesses =mBussinessMapper.findBySelective(new Business());
         PageInfo page = new PageInfo(businesses);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-//        map.put("list",logs);
         return map;
     }
 }

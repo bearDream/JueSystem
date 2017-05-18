@@ -30,11 +30,12 @@ import java.util.Map;
 @Api(value = "菜品分类服务",description = "提供RESTful风格API的商家的增删改查服务")
 @PermissionModule(text = "菜品分类管理")
 public class DishTypeController {
+
     @Autowired
     private DishTypeMapper dishTypeMapper;
 
     @ApiOperation("获取单个菜品分类信息")
-    @GetMapping
+    @GetMapping(value = "/{dishtypeId}")
     @PermissionMethod(text = "获取菜品分类信息")
 
     public Result get(DishType dishType, BindingResult bindingResult){
@@ -87,7 +88,7 @@ public class DishTypeController {
     }
 
     @ApiOperation("分页获取菜品种类")
-    @GetMapping("/getpage")
+    @GetMapping
     @com.beardream.ioc.Log
     public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
 //        System.out.println(role.getRoleId());
