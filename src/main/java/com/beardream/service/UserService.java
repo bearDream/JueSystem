@@ -50,14 +50,13 @@ public class UserService{
         return userMapper.findSelective(user);
     }
 
-    public Result getPage(int pageNum, int pageSize){
+    public Map getPage(User user, int pageNum, int pageSize){
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("user_id asc");
-        List<User> users =userMapper.findSelective(new User());
+        List<User> users =userMapper.findSelective(user);
         PageInfo page = new PageInfo(users);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
-        //map.put("list",dishs);
-        return ResultUtil.success(map);
+        return map;
     }
 }

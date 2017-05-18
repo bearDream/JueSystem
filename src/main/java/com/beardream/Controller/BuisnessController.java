@@ -27,7 +27,7 @@ import java.util.Map;
  * 商家控制器
  */
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/api/business")
 @Api(value = "商家服务", description = "提供RESTful风格API的商家的增删改查服务")
 @PermissionModule(text = "商家管理")
 public class BuisnessController {
@@ -36,8 +36,21 @@ public class BuisnessController {
     @Autowired
     private BusinessService businessService;
 
+    @ApiOperation("分页获取商家信息")
+    @GetMapping
+    @com.beardream.ioc.Log
+    public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+        if (businessService.getPage(business, pageNum,pageSize)!=null)
+            return ResultUtil.success(businessService.getPage(business, pageNum,pageSize));
+        else
+            return ResultUtil.error(-1,"系统错误");
+    }
+
     @ApiOperation("获取单个商家信息")
-    @GetMapping(value = "/{dishId}")
+    @GetMapping(value = "/get")
     @PermissionMethod(text = "获取商家信息")
     public Result get(Business business, BindingResult bindingResult){
         System.out.println(business.getBusinessId());
@@ -87,17 +100,5 @@ public class BuisnessController {
             return ResultUtil.error(-1, "修改失败");
     }
 
-  @ApiOperation("分页获取商家信息")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
-  public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-      if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-          return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-      }
-      if (businessService.getPage(business, pageNum,pageSize)!=null)
-          return ResultUtil.success(businessService.getPage(business, pageNum,pageSize));
-      else
-          return ResultUtil.error(-1,"系统错误");
-  }
 }
 
