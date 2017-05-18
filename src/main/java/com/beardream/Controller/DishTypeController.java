@@ -43,6 +43,7 @@ public class DishTypeController {
         return ResultUtil.success(dishTypeMapper.findBySelective(dishType));
     }
 
+
     @ApiOperation("添加菜品分类")
     @PostMapping
     @PermissionMethod(text = "添加菜品分类")

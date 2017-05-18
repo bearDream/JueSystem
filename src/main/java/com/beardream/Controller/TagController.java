@@ -37,7 +37,7 @@ public class TagController {
     private TagService tagService;
 
     @ApiOperation("获取单个标签信息")
-    @GetMapping
+    @GetMapping(value = "/get")
     @PermissionMethod(text = "获取标签信息")
     public Result get(Tag tag, BindingResult bindingResult){
         System.out.println(tag.getTagId());
@@ -90,7 +90,7 @@ public class TagController {
             return  ResultUtil.error(-1,"更新失败");
     }
     @ApiOperation("分页获取标签信息")
-    @GetMapping("/getpage")
+    @GetMapping
     @com.beardream.ioc.Log
     public Result getPage(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){

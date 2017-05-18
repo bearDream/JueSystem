@@ -75,9 +75,6 @@ public class BusinessService {
         }
     }
 
-    @ApiOperation("分页获取商家信息")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
     public Map getPage(Business business,int pageNum,int pageSize) {
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");

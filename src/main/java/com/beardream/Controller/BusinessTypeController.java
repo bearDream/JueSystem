@@ -42,8 +42,8 @@ public class BusinessTypeController {
     @Autowired
     private BusinessTypeService mBusinessTypeService;
 
-    @ApiOperation("分页获取菜品分类信息")
-    @GetMapping
+    @ApiOperation("获取单个商家分类信息")
+    @GetMapping(value = "/get")
     @PermissionMethod(text = "获取商家分类信息")
     public Result get(BusinessType businessType, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize, BindingResult bindingResult) {
         System.out.println(businessType.getBusinessTypeId());
@@ -96,7 +96,7 @@ public class BusinessTypeController {
     }
 
     @ApiOperation("分页获取商家分类信息")
-    @GetMapping("/getpage")
+    @GetMapping
     @com.beardream.ioc.Log
     public Result getPage(BusinessType businessType, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){

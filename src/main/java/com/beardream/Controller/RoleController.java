@@ -49,7 +49,7 @@ public class RoleController {
         Put更新数据的请求只能是参数形式，不能写在body中
      */
     @ApiOperation("获取单个角色信息")
-    @GetMapping
+    @GetMapping(value = "/get")
     @Log
     @PermissionMethod(text = "查看角色")
     public Result get(Role role, @RequestParam(value = "pageNum", defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false)  int pageSize) {
@@ -105,7 +105,7 @@ public class RoleController {
 
 
     @ApiOperation("分页获取角色信息")
-    @GetMapping("/getpage")
+    @GetMapping
     @com.beardream.ioc.Log
     public Result getPage(Role role, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
