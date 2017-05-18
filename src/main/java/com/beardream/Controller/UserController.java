@@ -1,6 +1,7 @@
 package com.beardream.Controller;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.Utils.TextUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.exception.UserException;
 import com.beardream.ioc.Log;
@@ -35,12 +36,14 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Log
-    @GetMapping
-    @ApiOperation("查找用户")
-    @PermissionMethod(text = "获取用户信息")
-    public Result get(User user) throws Exception {
-        return ResultUtil.success(userService.get(user));
+    @ApiOperation("分页获取用户")
+    @GetMapping("/getpage")
+    @com.beardream.ioc.Log
+    public Result getPage(User user, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult) {
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+        }
+        return ResultUtil.success(userService.getPage(pageNum,pageSize));
     }
 
     @PostMapping()
