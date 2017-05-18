@@ -1,13 +1,19 @@
 package com.beardream.service;
 
 import com.beardream.Utils.MD5;
+import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
+import com.beardream.model.Result;
 import com.beardream.model.User;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by soft01 on 2017/4/18.
@@ -42,5 +48,16 @@ public class UserService{
 
     public Object get(User user)throws Exception {
         return userMapper.findSelective(user);
+    }
+
+    public Result getPage(int pageNum, int pageSize){
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("user_id asc");
+        List<User> users =userMapper.findSelective(new User());
+        PageInfo page = new PageInfo(users);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        //map.put("list",dishs);
+        return ResultUtil.success(map);
     }
 }
