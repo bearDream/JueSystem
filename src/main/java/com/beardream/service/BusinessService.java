@@ -30,10 +30,10 @@ public class BusinessService {
     public BusinessMapper mBussinessMapper;
 
     //获取单个商家信息
-    public List find(Business business){
+    public Business find(Business business){
         System.out.println(mBussinessMapper.selectByPrimaryKey(1));
-        List<Business> BusinessList = mBussinessMapper.findBySelective(business);
-        return BusinessList;
+        Business BusinessInfo = mBussinessMapper.findBySelective(business).get(0);
+        return BusinessInfo;
     }
 
     //post请求

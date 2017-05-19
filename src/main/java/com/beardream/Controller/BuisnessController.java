@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,8 +60,8 @@ public class BuisnessController {
     }
     @ApiOperation("添加商家")
     @PostMapping
-    @PermissionMethod(text = "添加商家")
-    public Result post(Business business) {
+//    @PermissionMethod(text = "添加商家")
+    public @ResponseBody Object post(@RequestBody Business business) {
         int result;
         if (business == null)
             return ResultUtil.error(-1, "没有参数");
@@ -89,9 +91,10 @@ public class BuisnessController {
     @ApiOperation("更新商家")
     @PutMapping
     @PermissionMethod(text = "修改商家信息")
-    public Result put(Business business) {
+    public @ResponseBody Result put(@RequestBody Business business) {
         int result;
-        System.out.println(business.getBusinessId());
+        if (business.getBusinessId() == null)
+            return ResultUtil.error(-1,"商家id不能为空");
         business.setAddTime(new Date());
         result = businessMapper.updateByPrimaryKeySelective(business);
         if (result > 0)
