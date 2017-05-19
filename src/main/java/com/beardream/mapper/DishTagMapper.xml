@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.DishTagMapper">
+    <resultMap id="BaseResultMap" type="com.beardream.model.DishTag">
+        <id column="dish_tag_id" jdbcType="INTEGER" property="dishTagId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="dish_tag_type" jdbcType="TINYINT" property="dishTagType" />
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        dish_tag_id, name, content, tag_type, add_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_dish_tag
+        where dish_tag_id = #{dishTagId,jdbcType=INTEGER}
+    </select>
+    <select id="findBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_dish_tag
+        <where>
+            <if test="dishTagId != null">
+                and.
+                dish_tag_id = #{dishTagId,jdbcType=INTEGER}
+            </if>
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="content != null">
+                and content = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="dishTagType != null">
+                and tag_type = #{dishTagType,jdbcType=TINYINT}
+            </if>
+            <if test="addTime != null">
+                and add_time = #{addTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER  by add_time DESC
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_dish_tag
+        where dish_tag_id = #{dishTagId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.beardream.model.DishTag">
+        insert into t_dish_tag (dish_tag_id, name, content,
+        tag_type, add_time)
+        values (#{dishTagId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+        #{dishTagType,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.beardream.model.DishTag">
+        insert into t_dish_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dishTagId != null">
+                dish_tag_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="dishTagType != null">
+                dish_tag_type,
+            </if>
+            <if test="addTime != null">
+                add_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dishTagId != null">
+                #{dishTagId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="dishTagType != null">
+                #{dishTagType,jdbcType=TINYINT},
+            </if>
+            <if test="addTime != null">
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.DishTag">
+        update t_dish_tag
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="dishTagType != null">
+                dish_tag_type = #{dishTagType,jdbcType=TINYINT},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where dish_tag_id = #{dishTagId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.beardream.model.DishTag">
+        update t_dish_tag
+        set name = #{name,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR},
+        dish_tag_type = #{dishTagType,jdbcType=TINYINT},
+        add_time = #{addTime,jdbcType=TIMESTAMP}
+        where dish_tag_id = #{dishTagId,jdbcType=INTEGER}
+    </update>
+</mapper>
