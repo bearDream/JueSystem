@@ -72,18 +72,18 @@ public class PermissionAspect {
             throw new UserException(ResultEnum.Logout);
         }
 
+        // 获取拥有的角色权限
         User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
         System.out.println("用户的角色id："+user.getRoleId());
-
         Role role = mRoleMapper.selectByPrimaryKey(user.getRoleId());
         System.out.println(role.getPromission());
-
         //将用户的权限存到userPermission数组中
         String[] userPermission = role.getPromission().split(",");
 
         String accessPermission = request.getRequestURI() + "/" + TextUtil.toLowerStr(request.getMethod());
         System.out.println("访问的是这个："+accessPermission);
 
+        // 查看用户权限是否可以访问
         boolean can_access = false;
         for (int i = 0 ; i < userPermission.length ; i++){
             if (userPermission[i].equals(accessPermission)){

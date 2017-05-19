@@ -59,4 +59,14 @@ public class UserService{
         map.put("page",page);
         return map;
     }
+
+    public Map getFuzzyPage(User user, int pageNum, int pageSize){
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("user_id asc");
+        List<User> users =userMapper.findFuzzySelective(user);
+        PageInfo page = new PageInfo(users);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        return map;
+    }
 }

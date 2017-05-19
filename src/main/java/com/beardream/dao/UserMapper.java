@@ -12,6 +12,9 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer userId);
 
+    // 模糊查询
+    List<User> findFuzzySelective(User user);
+
     List<User> findAll();
 
     User findByMobile(String mobile);

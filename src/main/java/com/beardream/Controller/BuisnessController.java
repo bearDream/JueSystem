@@ -60,7 +60,7 @@ public class BuisnessController {
     }
     @ApiOperation("添加商家")
     @PostMapping
-//    @PermissionMethod(text = "添加商家")
+    @PermissionMethod(text = "添加商家")
     public @ResponseBody Object post(@RequestBody Business business) {
         int result;
         if (business == null)

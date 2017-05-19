@@ -49,6 +49,19 @@ public class UserController {
             return ResultUtil.error(-1,"数据不存在");
     }
 
+    @ApiOperation("分页获取用户")
+    @GetMapping("/fuzzy")
+    @com.beardream.ioc.Log
+    public Result getFuzzyPage(User user, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult) {
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
+            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+        }
+        if (userService.getPage(user, pageNum, pageSize) != null)
+            return ResultUtil.success(userService.getFuzzyPage(user, pageNum, pageSize));
+        else
+            return ResultUtil.error(-1,"数据不存在");
+    }
+
     @PostMapping()
     @ApiOperation("添加/注册用户")
     @PermissionMethod(text = "添加用户信息")
