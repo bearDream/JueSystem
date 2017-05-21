@@ -15,6 +15,8 @@ public class Business {
 
     private String businessImage;
 
+    private String businessCarouselImage;
+
     private Byte isShow;
 
     private Date addTime;
@@ -91,5 +93,13 @@ public class Business {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public String getBusinessCarouselImage() {
+        return businessCarouselImage;
+    }
+
+    public void setBusinessCarouselImage(String businessCarouselImage) {
+        this.businessCarouselImage = businessCarouselImage;
     }
 }
