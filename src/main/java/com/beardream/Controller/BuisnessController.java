@@ -89,7 +89,7 @@ public class BuisnessController {
     }
 
     @ApiOperation("更新商家")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PermissionMethod(text = "修改商家信息")
     public @ResponseBody Result put(@RequestBody Business business) {
         int result;

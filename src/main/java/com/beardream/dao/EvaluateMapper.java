@@ -1,7 +1,11 @@
 package com.beardream.dao;
 
 import com.beardream.model.Evaluate;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
+@Mapper
+@Repository
 public interface EvaluateMapper {
     int deleteByPrimaryKey(Integer evaluateId);
 
