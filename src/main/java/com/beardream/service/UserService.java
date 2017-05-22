@@ -59,7 +59,6 @@ public class UserService{
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
         return map;
-        return map;
     }
 
     public Map getFuzzyPage(User user, int pageNum, int pageSize){

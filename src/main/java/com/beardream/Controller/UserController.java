@@ -49,7 +49,7 @@ public class UserController {
             return ResultUtil.error(-1,"用户不存在");
     }
 
-    @ApiOperation("分页获取用户")
+    @ApiOperation("模糊查询用户")
     @GetMapping("/fuzzy")
     @com.beardream.ioc.Log
     public Result getFuzzyPage(User user, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult) {
