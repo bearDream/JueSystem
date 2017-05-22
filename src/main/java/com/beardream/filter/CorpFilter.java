@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by soft01 on 2017/5/17.
  */
-@Component
+//@Component
 public class CorpFilter implements Filter{
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,7 +30,6 @@ public class CorpFilter implements Filter{
         if (request.getMethod().equals("OPTIONS")){
             response.setStatus(204);
         }
-        System.out.println("**************添加跨域过滤器*********");
         chain.doFilter(req, res);
     }
 

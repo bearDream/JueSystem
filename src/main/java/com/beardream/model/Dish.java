@@ -9,6 +9,8 @@ public class Dish {
 
     private String dishDesc;
 
+    private String dishImage;
+
     private Date addTime;
 
     private String dishContent;
@@ -53,5 +55,11 @@ public class Dish {
         this.dishContent = dishContent == null ? null : dishContent.trim();
     }
 
+    public String getDishImage() {
+        return dishImage;
+    }
 
+    public void setDishImage(String dishImage) {
+        this.dishImage = dishImage;
+    }
 }

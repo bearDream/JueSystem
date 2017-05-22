@@ -3,10 +3,12 @@ package com.beardream.Controller;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.BusinessMapper;
+import com.beardream.dao.DishTagMapper;
 import com.beardream.dao.TagMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
+import com.beardream.service.DishTagService;
 import com.beardream.service.TagService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -27,36 +29,36 @@ import java.util.Map;
  * 标签控制器
  */
 @RestController
-@RequestMapping("/api/tag")
-@Api(value = "标签服务",description = "提供RESTful风格API的标签的增删改查服务")
-@PermissionModule(text = "标签管理")
-public class TagController {
+@RequestMapping("/api/dishtag")
+@Api(value = "菜品标签服务",description = "提供RESTful风格API的标签的增删改查服务")
+@PermissionModule(text = "菜品标签管理")
+public class DishTagController {
     @Autowired
-    private TagMapper tagMapper;
+    private DishTagMapper dishTagMapper;
     @Autowired
-    private TagService tagService;
+    private DishTagService dishTagService;
 
-    @ApiOperation("获取单个标签信息")
+    @ApiOperation("获取单个菜品标签信息")
     @GetMapping(value = "/get")
-    @PermissionMethod(text = "获取标签信息")
-    public Result get(Tag tag, BindingResult bindingResult){
-        System.out.println(tag.getTagId());
-        return ResultUtil.success(tagService.find(tag));
+    @PermissionMethod(text = "获取菜品标签信息")
+    public Result get(DishTag dishTag, BindingResult bindingResult){
+        System.out.println(dishTag.getDishTagId());
+        return ResultUtil.success(dishTagService.find(dishTag));
     }
 
 
     @ApiOperation("添加标签")
     @PostMapping
     @PermissionMethod(text = "添加标签")
-    public Result add(Tag tag){
+    public Result add(DishTag dishTag){
         int result;
-        if (tag==null)
+        if (dishTag==null)
             return  ResultUtil.error(-1,"没有参数");
-        List<Tag> t = tagMapper.findBySelective(tag);
+        List<DishTag> t = dishTagMapper.findBySelective(dishTag);
         if (t.size()>0)
             return ResultUtil.error(-1,"标签已存在");
-        tag.setAddTime(new Date());
-        result = tagMapper.insertSelective(tag);
+        dishTag.setAddTime(new Date());
+        result = dishTagMapper.insertSelective(dishTag);
         if (result>0)
             return ResultUtil.success("添加成功");
         else
@@ -67,9 +69,9 @@ public class TagController {
     @ApiOperation("删除标签")
     @DeleteMapping
     @PermissionMethod(text = "删除标签")
-    public Result delete(Tag tag){
+    public Result delete(DishTag dishTag){
         int result;
-        result = tagMapper.deleteByPrimaryKey(tag.getTagId());
+        result = dishTagMapper.deleteByPrimaryKey(dishTag.getDishTagId());
         if (result> 0 )
             return ResultUtil.success("删除成功");
         else
@@ -79,11 +81,11 @@ public class TagController {
     @ApiOperation("更新标签")
     @PutMapping
     @PermissionMethod(text = "更新标签")
-    public Result update(Tag tag){
+    public Result update(DishTag dishTag){
         int result;
-        System.out.println(tag.getTagId());
-        tag.setAddTime(new Date());
-        result = tagMapper.updateByPrimaryKeySelective(tag);
+        System.out.println(dishTag.getDishTagId());
+        dishTag.setAddTime(new Date());
+        result = dishTagMapper.updateByPrimaryKeySelective(dishTag);
         if (result>0)
             return  ResultUtil.success("更新成功");
         else
@@ -92,12 +94,12 @@ public class TagController {
     @ApiOperation("分页获取标签信息")
     @GetMapping
     @com.beardream.ioc.Log
-    public Result getPage(Tag tag, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(DishTag dishTag, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-        if (tagService.getPage(tag, pageNum,pageSize)!=null)
-            return ResultUtil.success(tagService.getPage(tag, pageNum,pageSize));
+        if (dishTagService.getPage(dishTag, pageNum,pageSize)!=null)
+            return ResultUtil.success(dishTagService.getPage(dishTag, pageNum,pageSize));
         else
             return ResultUtil.error(-1,"系统错误");
     }

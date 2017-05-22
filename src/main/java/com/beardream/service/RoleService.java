@@ -27,10 +27,12 @@ public class RoleService {
     @Autowired
     private RoleMapper mRoleMapper;
 
-    public List<Role> findRole(Role role) {
+    //find
+    public List<Role> find(Role role) {
         List<Role> roles = mRoleMapper.findBySelective(role);
         return roles;
     }
+
 
     public int addRole(Role role) {
         int result;
@@ -55,7 +57,7 @@ public class RoleService {
     }
 
     //分页获取角色
-    public Map getPage(int pageNum, int pageSize){
+    public Map getPage(Role role,int pageNum, int pageSize){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return null;
         }

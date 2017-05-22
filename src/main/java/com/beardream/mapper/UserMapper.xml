@@ -89,6 +89,57 @@
     order by user_id desc
   </select>
 
+  <select id="findFuzzySelective" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from t_user
+    <where>
+      <if test="userId != null">
+        and user_id = #{userId}
+      </if>
+      <if test="username != null">
+        and username LIKE CONCAT('%', #{username}, '%')
+      </if>
+      <if test="tel != null">
+        and tel LIKE CONCAT('%', #{tel}, '%')
+      </if>
+      <if test="realName != null">
+        and real_name = CONCAT('%', #{realName}, '%')
+      </if>
+      <if test="age != null">
+        and age = #{age}
+      </if>
+      <if test="sex != null">
+        and sex = #{sex}
+      </if>
+      <if test="idCard != null">
+        and id_card = #{idCard}
+      </if>
+      <if test="bankCard != null">
+        and bank_card = #{bankCard}
+      </if>
+      <if test="address != null">
+        and address like #{address}
+      </if>
+      <if test="logins != null">
+        and logins = #{logins}
+      </if>
+      <if test="alipay != null">
+        and alipay = #{alipay}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="level != null">
+        and level = #{level}
+      </if>
+    </where>
+    order by user_id desc
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_user
     where user_id = #{userId,jdbcType=INTEGER}

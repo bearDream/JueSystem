@@ -1,6 +1,9 @@
 package com.beardream.Controller;
 
 import com.beardream.Utils.ResultUtil;
+import com.beardream.Utils.TextUtil;
+import com.beardream.dao.FileUploadMapper;
+import com.beardream.model.FileUpload;
 import com.beardream.model.Result;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;
@@ -16,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -35,6 +40,7 @@ public class UploadController {
 
     private final ResourceLoader resourceLoader;
 
+
     @Value("${env}")
     private String env;
 
@@ -46,6 +52,9 @@ public class UploadController {
 
     @Value("${upload_url}")
     private String upload_url;
+
+    @Autowired
+    private FileUploadMapper fileUploadMapper;
 
     @Autowired
     public UploadController(ResourceLoader resourceLoader) {
@@ -69,6 +78,7 @@ public class UploadController {
     /*
         多文件上传
      */
+    @PostMapping(value = "/multiUpload")
     public Result FileUploads(MultipartFile[] file, HttpServletRequest request){
         // 上传目录
         String uploadDir, url;
@@ -105,10 +115,19 @@ public class UploadController {
 
     /*
         单个文件上传
+        存储的路径：
+        JueImage-->businessImage-->20170521-->对应的文件
+        JueImage-->dishImage-->20170521-->对应的文件
+        JueImage-->userImage-->20170521-->对应的文件
+        JueImage-->articleImage-->20170521-->对应的文件
      */
     @PostMapping(value = "/singleUpload")
-    public Result FileUpload(MultipartFile file, HttpServletRequest request) {
+    public Result FileUpload(@RequestParam(required = false) String type, MultipartFile file, HttpServletRequest request) {
         // 上传目录
+        System.out.println(type);
+        if (!TextUtil.isEmpty(type)){
+            return ResultUtil.error(-1,"请携带type参数又进行上传");
+        }
         String uploadDir, url;
         System.out.println(env);
         if (env.equals("dev")){
@@ -120,13 +139,23 @@ public class UploadController {
         }
         try {
             log.info("uploadDir={}", uploadDir);
+            uploadDir = uploadDir + type + "Image" + File.separator + new SimpleDateFormat("yyyyMMdd").format(new Date()) + File.separator;
             // 目录不存在则自动创建
             File dir = new File(uploadDir);
             if (!dir.exists()){
                 dir.mkdirs();
             }
             String file_url = executeUpload(uploadDir, file);
-            url = upload_url + file_url;// 将图片路径返回
+            url = upload_url + "?url=" + file_url;// 将图片路径返回
+            // 将相关的文件信息写入数据库
+            FileUpload files = new FileUpload();
+            files.setType(type);
+            files.setUrl(url);
+            files.setPath(dir.getPath() + File.separator + file_url);
+            files.setFileName(file_url);
+            files.setSize(file.getSize()+"");
+            files.setAddTime(new Date());
+            fileUploadMapper.insert(files);
         }catch (Exception e){
             e.printStackTrace();
             return ResultUtil.error(-1,"文件上传失败,原因："+e.getMessage());

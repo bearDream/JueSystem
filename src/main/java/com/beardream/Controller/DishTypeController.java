@@ -50,6 +50,7 @@ public class DishTypeController {
             return ResultUtil.error(-1,"分类不存在");
     }
 
+
     @ApiOperation("添加菜品分类")
     @PostMapping
     @PermissionMethod(text = "添加菜品分类")

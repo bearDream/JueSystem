@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +29,7 @@ import java.util.Map;
  * 商家控制器
  */
 @RestController
-@RequestMapping("/business")
+@RequestMapping("/api/business")
 @Api(value = "商家服务", description = "提供RESTful风格API的商家的增删改查服务")
 @PermissionModule(text = "商家管理")
 public class BuisnessController {
@@ -36,21 +38,30 @@ public class BuisnessController {
     @Autowired
     private BusinessService businessService;
 
-    @ApiOperation("获取单个商家信息")
+    @ApiOperation("分页获取商家信息")
     @GetMapping
-    @PermissionMethod(text = "获取商家信息")
-    public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
+    @com.beardream.ioc.Log
+    public Result getPage(Business business, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-        return ResultUtil.success(businessService.getPage(pageNum, pageSize));
+        if (businessService.getPage(business, pageNum,pageSize)!=null)
+            return ResultUtil.success(businessService.getPage(business, pageNum,pageSize));
+        else
+            return ResultUtil.error(-1,"系统错误");
     }
 
-
+    @ApiOperation("获取单个商家信息")
+    @GetMapping(value = "/get")
+    @PermissionMethod(text = "获取商家信息")
+    public Result get(Business business, BindingResult bindingResult){
+        System.out.println(business.getBusinessId());
+        return ResultUtil.success(businessService.find(business));
+    }
     @ApiOperation("添加商家")
     @PostMapping
     @PermissionMethod(text = "添加商家")
-    public Result post(Business business) {
+    public @ResponseBody Object post(@RequestBody Business business) {
         int result;
         if (business == null)
             return ResultUtil.error(-1, "没有参数");
@@ -78,11 +89,12 @@ public class BuisnessController {
     }
 
     @ApiOperation("更新商家")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PermissionMethod(text = "修改商家信息")
-    public Result put(Business business) {
+    public @ResponseBody Result put(@RequestBody Business business) {
         int result;
-        System.out.println(business.getBusinessId());
+        if (business.getBusinessId() == null)
+            return ResultUtil.error(-1,"商家id不能为空");
         business.setAddTime(new Date());
         result = businessMapper.updateByPrimaryKeySelective(business);
         if (result > 0)
@@ -91,23 +103,5 @@ public class BuisnessController {
             return ResultUtil.error(-1, "修改失败");
     }
 
- /*   @ApiOperation("分页获取商家信息")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
- *//*   public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
-            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
-        }
-
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Business> businesses =businessMapper.findBySelective(new Business());
-        PageInfo page = new PageInfo(businesses);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",businesses);
-        return ResultUtil.success(map);
-    }*/
 }
+

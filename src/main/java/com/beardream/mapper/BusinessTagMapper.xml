@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beardream.dao.BusinessTagMapper">
+    <resultMap id="BaseResultMap" type="com.beardream.model.BusinessTag">
+        <id column="business_tag_id" jdbcType="INTEGER" property="businessTagId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="business_tag_type" jdbcType="TINYINT" property="businessTagType" />
+        <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        business_tag_id, name, content, tag_type, add_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_business_tag
+        where business_tag_id = #{businessTagId,jdbcType=INTEGER}
+    </select>
+    <select id="findBySelective" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_business_tag
+        <where>
+            <if test="businessTagId != null">
+                and.
+                business_tag_id = #{businessTagId,jdbcType=INTEGER}
+            </if>
+            <if test="name != null">
+                and name = #{name,jdbcType=VARCHAR}
+            </if>
+            <if test="content != null">
+                and content = #{content,jdbcType=VARCHAR}
+            </if>
+            <if test="businessTagType != null">
+                and tag_type = #{businessTagType,jdbcType=TINYINT}
+            </if>
+            <if test="addTime != null">
+                and add_time = #{addTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        ORDER  by add_time DESC
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from t_business_tag
+        where business_tag_id = #{businessTagId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.beardream.model.BusinessTag">
+        insert into t_business_tag (business_tag_id, name, content,
+        tag_type, add_time)
+        values (#{businessTagId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR},
+        #{businessTagType,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.beardream.model.BusinessTag">
+        insert into t_business_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessTagId != null">
+                business_tag_id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="businessTagType != null">
+                tag_type,
+            </if>
+            <if test="addTime != null">
+                add_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessTagId != null">
+                #{businessTagId,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="businessTagType != null">
+                #{businessTagType,jdbcType=TINYINT},
+            </if>
+            <if test="addTime != null">
+                #{addTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.BusinessTag">
+        update t_business_tag
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="businessTagType != null">
+                business_tag_type = #{businessTagType,jdbcType=TINYINT},
+            </if>
+            <if test="addTime != null">
+                add_time = #{addTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where business_tag_id = #{businessTagId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.beardream.model.BusinessTag">
+        update t_business_tag
+        set name = #{name,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR},
+        business_tag_type = #{businessTagType,jdbcType=TINYINT},
+        add_time = #{addTime,jdbcType=TIMESTAMP}
+        where business_tag_id = #{businessTagId,jdbcType=INTEGER}
+    </update>
+</mapper>

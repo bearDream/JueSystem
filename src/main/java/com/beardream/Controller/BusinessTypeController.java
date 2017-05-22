@@ -6,10 +6,7 @@ import com.beardream.dao.BusinessTypeMapper;
 import com.beardream.dao.DishTypeMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
-import com.beardream.model.BusinessType;
-import com.beardream.model.DishType;
-import com.beardream.model.Result;
-import com.beardream.model.Role;
+import com.beardream.model.*;
 import com.beardream.service.BusinessTypeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -45,18 +42,14 @@ public class BusinessTypeController {
     @Autowired
     private BusinessTypeService mBusinessTypeService;
 
-    @ApiOperation("分页获取菜品分类信息")
-    @GetMapping
+    @ApiOperation("获取单个商家分类信息")
+    @GetMapping(value = "/get")
     @PermissionMethod(text = "获取商家分类信息")
     public Result get(BusinessType businessType, @RequestParam(value = "pageNum", defaultValue = "1", required = false) int pageNum, @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize, BindingResult bindingResult) {
         System.out.println(businessType.getBusinessTypeId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
-        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)) {
-            return ResultUtil.error(-1, "pageNum,pageNum不能为空！");
-        }
-        return ResultUtil.success(mBusinessTypeService.getPage(pageNum, pageSize));
+        return ResultUtil.success(mBusinessTypeService.find(businessType));
     }
+
 
     @ApiOperation("添加商家分类")
     @PostMapping
@@ -100,6 +93,19 @@ public class BusinessTypeController {
             return ResultUtil.success("修改成功");
         else
             return ResultUtil.error(-1, "修改失败");
+    }
+
+    @ApiOperation("分页获取商家分类信息")
+    @GetMapping
+    @com.beardream.ioc.Log
+    public Result getPage(BusinessType businessType, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+        if (mBusinessTypeService.getPage(businessType, pageNum,pageSize)!=null)
+            return ResultUtil.success(mBusinessTypeService.getPage(businessType, pageNum,pageSize));
+        else
+            return ResultUtil.error(-1,"系统错误");
     }
 }
 

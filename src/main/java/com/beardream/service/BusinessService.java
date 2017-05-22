@@ -3,10 +3,7 @@ package com.beardream.service;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
 import com.beardream.dao.BusinessMapper;
-import com.beardream.model.Business;
-import com.beardream.model.Log;
-import com.beardream.model.Result;
-import com.beardream.model.Role;
+import com.beardream.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +29,53 @@ public class BusinessService {
     @Autowired
     public BusinessMapper mBussinessMapper;
 
-
-    //删除
-    public int deleteBusiness(Business business) {
-        return mBussinessMapper.deleteByPrimaryKey(business.getBusinessId());
+    //获取单个商家信息
+    public Business find(Business business){
+        System.out.println(mBussinessMapper.selectByPrimaryKey(1));
+        Business BusinessInfo = mBussinessMapper.findBySelective(business).get(0);
+        return BusinessInfo;
     }
 
-    @ApiOperation("分页获取商家信息")
-    @GetMapping("/getpage")
-    @com.beardream.ioc.Log
-    public Map getPage(int pageNum,int pageSize) {
+    //post请求
+    public String post(Business business){
+        int result;
+        if (business==null)
+            return "没有参数";
+        List<Business> BussinessList = mBussinessMapper.findBySelective(business);
+        if (BussinessList.size()>0)
+            return "该商家已存在";
+        business.setAddTime(new Date());
+        result = mBussinessMapper.insertSelective(business);
+        if (result>0){
+            return "添加成功";
+        }else{
+            return "添加失败";
+        }
+    }
+
+    //删除
+    public String delete(Business business){
+        int result;
+        result = mBussinessMapper.deleteByPrimaryKey(business.getBusinessId());
+        if (result > 0) {
+            return "删除成功";
+        }else {
+            return "删除失败";
+        }
+    }
+
+    public String put(Business business){
+        int result;
+        System.out.println(business.getBusinessId());
+        result = mBussinessMapper.updateByPrimaryKeySelective(business);
+        if (result > 0) {
+            return "更新成功";
+        }else {
+            return "更新失败";
+        }
+    }
+
+    public Map getPage(Business business,int pageNum,int pageSize) {
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
         List<Business> businesses =mBussinessMapper.findBySelective(new Business());
