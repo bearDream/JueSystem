@@ -7,6 +7,7 @@ import com.beardream.dao.DishMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.Article;
+import com.beardream.model.Business;
 import com.beardream.model.Dish;
 import com.beardream.model.Result;
 import com.beardream.service.ArticleService;
@@ -14,6 +15,7 @@ import com.beardream.service.DishService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,9 +61,9 @@ public class ArticleController {
     }
 
     @ApiOperation("更新图文")
-    @PutMapping
-    @PermissionMethod(text = "更新图文")
-    public @ResponseBody  Result put(@RequestBody  Article article) {
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PermissionMethod(text = "修改图文信息")
+    public @ResponseBody Result put(@RequestBody Article article) {
         int result;
         if (article.getArticleId()==null)
             return  ResultUtil.error(-1,"商家id不能为空");
