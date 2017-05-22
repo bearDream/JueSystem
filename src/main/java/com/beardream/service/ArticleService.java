@@ -2,7 +2,9 @@ package com.beardream.service;
 
 import com.beardream.Utils.ResultUtil;
 import com.beardream.Utils.TextUtil;
+import com.beardream.dao.ArticleMapper;
 import com.beardream.dao.DishMapper;
+import com.beardream.model.Article;
 import com.beardream.model.Dish;
 import com.beardream.model.Result;
 import com.beardream.model.Role;
@@ -24,25 +26,26 @@ import java.util.Map;
  */
 @Component
 @Service
-public class DishService {
+public class ArticleService {
 
     @Autowired
-    public DishMapper dishMapper;
+    public ArticleMapper articleMapper;
 
-    public Dish find(Dish dish){
-        Dish dishInfo = dishMapper.selectByPrimaryKey(dish.getDishId());
-        return dishInfo;
+    public List find(Article article){
+        System.out.println(articleMapper.selectByPrimaryKey(1));
+        List<Article> articles = articleMapper.findBySelective(article);
+        return articles;
     }
 
-    public String post(Dish dish){
+    public String post(Article article){
         int result;
-        if (dish==null)
+        if (article==null)
             return "没有参数";
-        List<Dish> dishList = dishMapper.findBySelective(dish);
-        if (dishList.size()>0)
-            return "菜品已存在";
-        dish.setAddTime(new Date());
-        result = dishMapper.insertSelective(dish);
+        List<Article> articles = articleMapper.findBySelective(article);
+        if (articles.size()>0)
+            return "该文章已存在";
+        article.setAddTime(new Date());
+        result = articleMapper.insertSelective(article);
         if (result>0){
             return "添加成功";
         }else{
@@ -50,9 +53,9 @@ public class DishService {
         }
     }
 
-    public String delete(Dish dish){
+    public String delete(Article article){
         int result;
-        result = dishMapper.deleteByPrimaryKey(dish.getDishId());
+        result = articleMapper.deleteByPrimaryKey(article.getArticleId());
         if (result > 0) {
             return "删除成功";
         }else {
@@ -60,10 +63,10 @@ public class DishService {
         }
     }
 
-    public String put(Dish dish){
+    public String put(Article article){
         int result;
-        System.out.println(dish.getDishId());
-        result = dishMapper.updateByPrimaryKeySelective(dish);
+        System.out.println(article.getArticleId());
+        result = articleMapper.updateByPrimaryKeySelective(article);
         if (result > 0) {
             return "更新成功";
         }else {
@@ -71,11 +74,11 @@ public class DishService {
         }
     }
 
-    public Map getPage(Dish dish, int pageNum, int pageSize){
+    public Map getPage(Article article, int pageNum, int pageSize){
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Dish> dishs =dishMapper.findBySelective(new Dish());
-        PageInfo page = new PageInfo(dishs);
+        List<Article> articles =articleMapper.findBySelective(new Article());
+        PageInfo page = new PageInfo(articles);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
         return map;

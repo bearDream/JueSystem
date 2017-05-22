@@ -37,20 +37,23 @@ public class NutritionController {
     @GetMapping(value = "/get")
     public Result get(Nutrition nutrition, BindingResult bindingResult){
         System.out.println(nutrition.getNurtritionId());
-        return ResultUtil.success(mNutritionService.find(nutrition));
+        if (mNutritionService.find(nutrition) != null)
+            return ResultUtil.success(mNutritionService.find(nutrition));
+        else
+            return ResultUtil.error(-1,"数据不存在");
     }
 
     @ApiOperation("分页获取营养价值")
     @GetMapping
     @com.beardream.ioc.Log
-    public Result getPage(Nutrition nutrition, @RequestParam(value = "pageNum", required = false)  int pageNum, @RequestParam(value = "pageSize", required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Nutrition nutrition, @RequestParam(value = "pageNum",defaultValue = "1", required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "1", required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
         if (mNutritionService.getPage(nutrition, pageNum, pageSize) != null)
             return ResultUtil.success(mNutritionService.getPage(nutrition, pageNum, pageSize));
         else
-            return ResultUtil.error(-1,"系统出错");
+            return ResultUtil.error(-1,"数据不存在");
     }
 
     @ApiOperation("添加营养价值")

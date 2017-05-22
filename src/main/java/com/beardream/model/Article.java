@@ -1,7 +1,9 @@
 package com.beardream.model;
 
+import java.util.Date;
+
 public class Article {
-    private Integer articalId;
+    private Integer articleId;
 
     private Integer userId;
 
@@ -11,12 +13,14 @@ public class Article {
 
     private String content;
 
-    public Integer getArticalId() {
-        return articalId;
+    private Date addTime;
+
+    public Integer getArticleId() {
+        return articleId;
     }
 
-    public void setArticalId(Integer articalId) {
-        this.articalId = articalId;
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
     }
 
     public Integer getUserId() {
@@ -45,6 +49,10 @@ public class Article {
 
     public String getContent() {
         return content;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
     public void setContent(String content) {

@@ -20,8 +20,7 @@ public interface DishTypeMapper {
 
     DishType selectByPrimaryKey(Integer dishtypeId);
 
-    List<DishType> findBySelective(DishType dishType);
-
+    List<DishType>findBySelective(DishType dishType);
 
     int updateByPrimaryKeySelective(DishType record);
 

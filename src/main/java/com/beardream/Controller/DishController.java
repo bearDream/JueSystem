@@ -36,11 +36,14 @@ public class DishController {
     private DishService mDishService;
 
     @ApiOperation("获取单个菜品信息")
-    @GetMapping(value = "/{dishId}")
+    @GetMapping(value = "/get")
     @PermissionMethod(text = "获取菜品信息")
     public Result get(Dish dish, BindingResult bindingResult){
         System.out.println(dish.getDishId());
-        return ResultUtil.success(mDishService.find(dish));
+        if (mDishService.find(dish)!=null)
+            return ResultUtil.success(mDishService.find(dish));
+        else
+            return ResultUtil.error(-1,"菜品不存在");
     }
 
     @ApiOperation("添加菜品")
