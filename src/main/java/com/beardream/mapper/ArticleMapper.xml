@@ -2,16 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beardream.dao.ArticleMapper">
   <resultMap id="BaseResultMap" type="com.beardream.model.Article">
-    <id column="artical_id" jdbcType="INTEGER" property="articalId" />
+    <id column="article_id" jdbcType="INTEGER" property="articleId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="cover_image" jdbcType="VARCHAR" property="coverImage" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
+
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Article">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
-    artical_id, user_id, cover_image, is_show
+    article_id, user_id, content, cover_image, is_show, add_time
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -22,23 +23,50 @@
     ,
     <include refid="Blob_Column_List" />
     from t_article
-    where artical_id = #{articalId,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
+  </select>
+  <select id="findBySelective" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_article
+    <where>
+      <if test="articleId != null">
+        and.
+        article_id = #{articleId,jdbcType=INTEGER}
+      </if>
+      <if test="userId != null">
+        and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="coverImage != null">
+        and cover_image = #{coverImage,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow != null">
+        and is_show = #{isShow,jdbcType=TINYINT}
+      </if>
+      <if test="addTime != null">
+        and add_time = #{addTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    ORDER  by add_time DESC
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_article
-    where artical_id = #{articalId,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Article">
-    insert into t_article (artical_id, user_id, cover_image, 
-      is_show, content)
-    values (#{articalId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{coverImage,jdbcType=VARCHAR}, 
-      #{isShow,jdbcType=TINYINT}, #{content,jdbcType=LONGVARCHAR})
+    insert into t_article (article_id, user_id, cover_image,
+      is_show, content, add_time)
+    values (#{articleId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{coverImage,jdbcType=VARCHAR},
+      #{isShow,jdbcType=TINYINT}, #{content,jdbcType=LONGVARCHAR}, #{addtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Article">
     insert into t_article
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="articalId != null">
-        artical_id,
+      <if test="articleId != null">
+        article_id,
       </if>
       <if test="userId != null">
         user_id,
@@ -49,13 +77,16 @@
       <if test="isShow != null">
         is_show,
       </if>
+      <if test="addTime != null">
+        add_time,
+      </if>
       <if test="content != null">
-        content,
+        content
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="articalId != null">
-        #{articalId,jdbcType=INTEGER},
+      <if test="articleId != null">
+        #{articleId,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
         #{userId,jdbcType=INTEGER},
@@ -66,14 +97,20 @@
       <if test="isShow != null">
         #{isShow,jdbcType=TINYINT},
       </if>
+      <if test="addtime != null">
+        #{addTime,jdbcType=TIMESTAMP}
+      </if>
       <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
+        #{content,jdbcType=LONGVARCHAR}
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.beardream.model.Article">
     update t_article
     <set>
+      <if test="articleId != null">
+        article_id = #{articleId,jdbcType=INTEGER},
+      </if>
       <if test="userId != null">
         user_id = #{userId,jdbcType=INTEGER},
       </if>
@@ -84,24 +121,30 @@
         is_show = #{isShow,jdbcType=TINYINT},
       </if>
       <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
+        content = #{content,jdbcType=LONGVARCHAR}
       </if>
     </set>
-    where artical_id = #{articalId,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Article">
     update t_article
-    set user_id = #{userId,jdbcType=INTEGER},
+    set article_id = #{articleId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
       cover_image = #{coverImage,jdbcType=VARCHAR},
       is_show = #{isShow,jdbcType=TINYINT},
+      add_time = #{addTime,jdbcType=TIMESTAMP}.
       content = #{content,jdbcType=LONGVARCHAR}
-    where artical_id = #{articalId,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Article">
     update t_article
-    set user_id = #{userId,jdbcType=INTEGER},
+    set
+      article_id = #{articleId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
       cover_image = #{coverImage,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR},
+      add_time = #{addTime,jdbcType=TIMESTAMP},
       is_show = #{isShow,jdbcType=TINYINT}
-    where artical_id = #{articalId,jdbcType=INTEGER}
+    where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>
