@@ -33,10 +33,10 @@
     from t_log l INNER JOIN t_user u on l.user_id=u.user_id
     <where>
       <if test="logId != null">
-        and log_id = #{logId,jdbcType=INT}
+        and log_id = #{logId}
       </if>
       <if test="userId != null">
-        and user_id = #{user.userId,jdbcType=INT}
+        and user_id = #{user.userId}
       </if>
       <if test="logAddtime != null">
         and log_addtime = #{logAddtime,jdbcType=TIMESTAMP}

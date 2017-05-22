@@ -29,10 +29,9 @@ public class DishService {
     @Autowired
     public DishMapper dishMapper;
 
-    public List find(Dish dish){
-        System.out.println(dishMapper.selectByPrimaryKey(1));
-        List<Dish> dishList = dishMapper.findBySelective(dish);
-        return dishList;
+    public Dish find(Dish dish){
+        Dish dishInfo = dishMapper.selectByPrimaryKey(dish.getDishId());
+        return dishInfo;
     }
 
     public String post(Dish dish){

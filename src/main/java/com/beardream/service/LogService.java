@@ -30,6 +30,10 @@ public class LogService {
         return mLogMapper.deleteByPrimaryKey(log.getLogId());
     }
 
+    public LogUser get(LogUser logUser){
+        return mLogMapper.findLogUserBySelective(logUser).get(0);
+    }
+
     public Map getPage(int pageNum,int pageSize, LogUser logUser) {
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("log_addtime asc");

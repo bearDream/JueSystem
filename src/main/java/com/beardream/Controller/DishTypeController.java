@@ -7,6 +7,7 @@ import com.beardream.dao.DishTypeMapper;
 import com.beardream.ioc.PermissionMethod;
 import com.beardream.ioc.PermissionModule;
 import com.beardream.model.*;
+import com.beardream.service.DishTypeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -34,13 +35,19 @@ public class DishTypeController {
     @Autowired
     private DishTypeMapper dishTypeMapper;
 
+    @Autowired
+    private DishTypeService dishTypeService;
+
     @ApiOperation("获取单个菜品分类信息")
-    @GetMapping(value = "/{dishtypeId}")
+    @GetMapping(value = "/get")
     @PermissionMethod(text = "获取菜品分类信息")
 
     public Result get(DishType dishType, BindingResult bindingResult){
         System.out.println(dishType.getDishtypeId());
-        return ResultUtil.success(dishTypeMapper.findBySelective(dishType));
+        if (dishTypeService.find(dishType)!=null)
+            return ResultUtil.success(dishTypeMapper.findBySelective(dishType));
+        else
+            return ResultUtil.error(-1,"分类不存在");
     }
 
 
@@ -91,22 +98,17 @@ public class DishTypeController {
     @ApiOperation("分页获取菜品种类")
     @GetMapping
     @com.beardream.ioc.Log
-    public Result getPage(Role role, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(DishType dishType, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
 //        System.out.println(role.getRoleId());
         System.out.println(pageNum);
         System.out.println(pageSize);
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-
-        //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<DishType> dishTypes =dishTypeMapper.findBySelective(new DishType());
-        PageInfo page = new PageInfo(dishTypes);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("page",page);
-        map.put("list",dishTypes);
-        return ResultUtil.success(map);
+        if (dishTypeService.getPage(dishType,pageSize,pageNum)!=null)
+            return ResultUtil.success(dishTypeService.getPage(dishType,pageSize,pageNum));
+        else
+            return ResultUtil.error(-1,"系统错误");
     }
 }
 
