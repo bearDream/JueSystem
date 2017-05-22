@@ -37,7 +37,7 @@ public class BusinessService {
     }
 
     //post请求
-    public String post(Business business){
+    public String add(Business business){
         int result;
         if (business==null)
             return "没有参数";

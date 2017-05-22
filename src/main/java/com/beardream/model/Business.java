@@ -19,6 +19,8 @@ public class Business {
 
     private Byte isShow;
 
+    private Byte isTake;
+
     private Date addTime;
 
     private String content;
@@ -101,5 +103,13 @@ public class Business {
 
     public void setBusinessCarouselImage(String businessCarouselImage) {
         this.businessCarouselImage = businessCarouselImage;
+    }
+
+    public Byte getIsTake() {
+        return isTake;
+    }
+
+    public void setIsTake(Byte isTake) {
+        this.isTake = isTake;
     }
 }

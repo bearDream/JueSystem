@@ -62,20 +62,6 @@ public class UploadController {
     }
 
     /*
-        获取图片并显示
-     */
-    @GetMapping("/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<?> getFile(@PathVariable String filename) {
-
-        try {
-            return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, filename).toString()));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    /*
         多文件上传
      */
     @PostMapping(value = "/multiUpload")

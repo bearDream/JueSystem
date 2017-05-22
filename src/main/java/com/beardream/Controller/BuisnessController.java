@@ -65,15 +65,7 @@ public class BuisnessController {
         int result;
         if (business == null)
             return ResultUtil.error(-1, "没有参数");
-        List<Business> b = businessMapper.findBySelective(business);
-        if (b.size() > 0)
-            return ResultUtil.error(-1, "添加失败，商家已存在");
-        business.setAddTime(new Date());
-        result = businessMapper.insertSelective(business);
-        if (result > 0)
-            return ResultUtil.success("添加成功");
-        else
-            return ResultUtil.error(-1, "添加失败");
+        return ResultUtil.success(businessService.add(business));
     }
 
     @ApiOperation("删除商家")
