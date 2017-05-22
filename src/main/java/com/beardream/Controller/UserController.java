@@ -47,10 +47,6 @@ public class UserController {
             return ResultUtil.success(userService.getPage(user,pageNum,pageSize));
         else
             return ResultUtil.error(-1,"用户不存在");
-        if (userService.getPage(user, pageNum, pageSize) != null)
-            return ResultUtil.success(userService.getPage(user, pageNum, pageSize));
-        else
-            return ResultUtil.error(-1,"数据不存在");
     }
 
     @ApiOperation("分页获取用户")
