@@ -6,6 +6,8 @@ import com.beardream.dao.NumberMapper;
 import com.beardream.model.Business;
 import com.beardream.model.Number;
 import com.beardream.model.Result;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -31,48 +33,49 @@ public class TakeNumService {
     private BusinessMapper mBusinessMapper;
 
     // 取号 该方法应该为一个同步方法，避免多用户同时操作该方法,造成取号数据不准确
-    public Result takeNum(Number number){
-        synchronized (this) {
-            Business business = mBusinessMapper.selectByPrimaryKey(number.getBusinessId());
-            if (business == null || business.getIsTake() == 0){
-                return ResultUtil.error(-1,"商家暂未开放取号，请稍候再来哦");
-            }
+    public Result takeNum(Integer businessId){
 
-            List<Number> queue = mNumberMapper.findBySelective(number);
+        Business business = mBusinessMapper.selectByPrimaryKey(businessId);
+        Number number = new Number();
+        number.setBusinessId(businessId);
+        number.setIsExpired((byte) 1);
 
-            Collections.sort(queue, new Comparator<Number>() {
-                @Override
-                public int compare(Number o1, Number o2) {
-                    if(o1 instanceof Number && o2 instanceof Number){
-                        Number e1 = (Number) o1;
-                        Number e2 = (Number) o2;
-                        return e1.getNumber().compareTo(e2.getNumber());
-                    }
-                    throw new ClassCastException("不能转换为Number类型");
-                }
-            });
-
-            for (Number number1 : queue){
-                System.out.println(number1);
-            }
-
-            // 获得最大的number
-            int maxNum = queue.get(queue.size()).getNumber();
-            System.out.println(maxNum);
-
-            //设置取的号为这个number+1添加到数据库
-            number.setNumber(maxNum+1);
-            number.setIsExpired((byte) 1);
-            number.setAddTime(new Date());
-
-            mNumberMapper.insert(number);
-            // 将取的号返回给控制器
-            return ResultUtil.success(number.getNumber().toString());
+        if (business == null || business.getIsTake() == 1){
+            return ResultUtil.error(-1,"商家已关闭取号，请重新刷新数据");
         }
+
+        List<Number> queue = mNumberMapper.findBySelective(number);
+
+        Collections.sort(queue, new Comparator<Number>() {
+            @Override
+            public int compare(Number o1, Number o2) {
+                if(o1 instanceof Number && o2 instanceof Number){
+                    Number e1 = (Number) o1;
+                    Number e2 = (Number) o2;
+                    return e1.getNumber().compareTo(e2.getNumber());
+                }
+                throw new ClassCastException("不能转换为Number类型");
+            }
+        });
+
+        for (Number number1 : queue){
+            System.out.println(number1.getNumber());
+        }
+
+        // 将取的号返回给控制器
+        return ResultUtil.success(queue);
     }
 
-    // 刷新队列
-    public void refreshNum(Number number){
+
+
+    public Map<String, Object> getEnableTakeBusiness(Business business, int pageNum, int pageSize){
+
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
+        List<Business> businesses =mBusinessMapper.findBySelective(business);
+        PageInfo page = new PageInfo(businesses);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        return map;
 
     }
 }
