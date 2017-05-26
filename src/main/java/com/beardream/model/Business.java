@@ -25,6 +25,8 @@ public class Business {
 
     private String content;
 
+    private String level;
+
     public Integer getBusinessId() {
         return businessId;
     }
@@ -112,4 +114,8 @@ public class Business {
     public void setIsTake(Byte isTake) {
         this.isTake = isTake;
     }
+
+    public String getLevel() {return level;}
+
+    public void setLevel(String level) {this.level = level;}
 }
