@@ -29,9 +29,9 @@
     from t_business
     where business_id = #{businessId,jdbcType=INTEGER}
   </select>
-  <select id="findBySelective" resultMap="BaseResultMap">
+  <select id="findBySelective" resultMap="ResultMapWithBLOBs">
     SELECT
-    <include refid="Base_Column_List" />
+    business_id, user_id, name, address, tel, business_image, business_carousel_image, is_show, is_take, add_time, content
     from t_business
     <where>
       <if test="businessId != null">

@@ -4,13 +4,12 @@
   <resultMap id="BaseResultMap" type="com.beardream.model.DishType">
     <id column="dishtype_id" jdbcType="INTEGER" property="dishtypeId" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="dish_id" jdbcType="INTEGER" property="dishId" />
     <result column="is_show" jdbcType="TINYINT" property="isShow" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
   </resultMap>
   <sql id="Base_Column_List">
-    dishtype_id, type_name, dish_id, is_show, add_time, parent_id
+    dishtype_id, type_name, is_show, add_time, parent_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -18,6 +17,14 @@
     from t_dish_type
     where dishtype_id = #{dishtypeId,jdbcType=INTEGER}
   </select>
+
+  <select id="selectByTypeName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dish_type
+    where type_name = #{typeName,jdbcType=VARCHAR}
+  </select>
+
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List" />
@@ -29,17 +36,8 @@
       <if test="typeName != null">
         and type_name = #{typeName,jdbcType=VARCHAR}
       </if>
-      <if test="dishId != null">
-        and dish_id = #{dishId,jdbcType=VARCHAR}
-      </if>
       <if test="isShow!= null">
         and is_show = #{isShow,jdbcType=INTEGER}
-      </if>
-      <if test="addTime != null">
-        and business_image = #{businessImage,jdbcType=VARCHAR}
-      </if>
-      <if test="isShow != null">
-        and is_show = #{isShow,jdbcType=TINYINT}
       </if>
       <if test="addTime != null">
         and add_time = #{addTime,jdbcType=TIMESTAMP}
@@ -52,10 +50,10 @@
     where dishtype_id = #{dishtypeId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.DishType">
-    insert into t_dish_type (dishtype_id, type_name, dish_id, 
+    insert into t_dish_type (dishtype_id, type_name,
       is_show, add_time, parent_id
       )
-    values (#{dishtypeId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{dishId,jdbcType=INTEGER}, 
+    values (#{dishtypeId,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR},
       #{isShow,jdbcType=TINYINT}, #{addTime,jdbcType=TIMESTAMP}, #{parentId,jdbcType=INTEGER}
       )
   </insert>
@@ -67,9 +65,6 @@
       </if>
       <if test="typeName != null">
         type_name,
-      </if>
-      <if test="dishId != null">
-        dish_id,
       </if>
       <if test="isShow != null">
         is_show,
@@ -88,9 +83,6 @@
       <if test="typeName != null">
         #{typeName,jdbcType=VARCHAR},
       </if>
-      <if test="dishId != null">
-        #{dishId,jdbcType=INTEGER},
-      </if>
       <if test="isShow != null">
         #{isShow,jdbcType=TINYINT},
       </if>
@@ -108,9 +100,6 @@
       <if test="typeName != null">
         type_name = #{typeName,jdbcType=VARCHAR},
       </if>
-      <if test="dishId != null">
-        dish_id = #{dishId,jdbcType=INTEGER},
-      </if>
       <if test="isShow != null">
         is_show = #{isShow,jdbcType=TINYINT},
       </if>
@@ -126,7 +115,6 @@
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.DishType">
     update t_dish_type
     set type_name = #{typeName,jdbcType=VARCHAR},
-      dish_id = #{dishId,jdbcType=INTEGER},
       is_show = #{isShow,jdbcType=TINYINT},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       parent_id = #{parentId,jdbcType=INTEGER}

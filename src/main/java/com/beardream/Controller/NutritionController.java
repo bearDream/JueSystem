@@ -7,9 +7,11 @@ import com.beardream.model.*;
 import com.beardream.service.NutritionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +39,9 @@ public class NutritionController {
     @GetMapping(value = "/get")
     public Result get(Nutrition nutrition, BindingResult bindingResult){
         System.out.println(nutrition.getNurtritionId());
-        if (mNutritionService.find(nutrition) != null)
-            return ResultUtil.success(mNutritionService.find(nutrition));
+        Nutrition nutrition1 = mNutritionService.find(nutrition);
+        if (nutrition1 != null)
+            return ResultUtil.success(nutrition1);
         else
             return ResultUtil.error(-1,"数据不存在");
     }
@@ -58,9 +61,9 @@ public class NutritionController {
 
     @ApiOperation("添加营养价值")
     @PostMapping
-    public Result post(Nutrition nutrition){
+    public @ResponseBody Result post(@RequestBody Nutrition nutrition){
         System.out.println(nutrition.getNurtritionId());
-        return ResultUtil.success(mNutritionService.add(nutrition));
+        return mNutritionService.add(nutrition);
     }
 
     @ApiOperation("删除营养价值")
@@ -71,8 +74,8 @@ public class NutritionController {
     }
 
     @ApiOperation("更新营养价值")
-    @PutMapping
-    public Result put(Nutrition nutrition) {
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody Result put(@RequestBody Nutrition nutrition) {
         System.out.println(nutrition.getNurtritionId());
         return ResultUtil.success(mNutritionService.put(nutrition));
     }

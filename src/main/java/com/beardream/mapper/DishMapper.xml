@@ -3,27 +3,36 @@
 <mapper namespace="com.beardream.dao.DishMapper">
   <resultMap id="BaseResultMap" type="com.beardream.model.Dish">
     <id column="dish_id" jdbcType="INTEGER" property="dishId" />
+    <result column="dishtype_id" jdbcType="INTEGER" property="dishtypeId" />
     <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
-    <result column="dish_iamge" jdbcType="VARCHAR" property="dishIamge" />
+    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
     <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.beardream.model.Dish">
     <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />
   </resultMap>
+  <sql id="dishtype_Column_List">
+    d.dish_id, d.dishtype_id, dt.type_name, d.dish_name, d.dish_desc, d.dish_image, d.add_time
+  </sql>
   <sql id="Base_Column_List">
-    dish_id, dish_name, dish_desc, dish_image, add_time
+    dish_id, dishtype_id, dish_name, dish_desc, dish_image, add_time
   </sql>
   <sql id="Blob_Column_List">
     dish_content
   </sql>
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
-    <include refid="Base_Column_List" />
-    from t_dish
+    <include refid="dishtype_Column_List" />,
+    <include refid="Blob_Column_List" />
+    from t_dish d inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
     <where>
       <if test="dishId != null">
         and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="dishtypeId != null">
+        and dishtype_id = #{dishtypeId,jdbcType=INTEGER}
       </if>
       <if test="dishName != null">
         and dish_name = #{dishName,jdbcType=VARCHAR}
@@ -44,21 +53,28 @@
     order by add_time desc
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-    select 
-    <include refid="Base_Column_List" />
-    ,
+    select
+    <include refid="dishtype_Column_List" />,
     <include refid="Blob_Column_List" />
-    from t_dish
+    from t_dish d inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
     where dish_id = #{dishId,jdbcType=INTEGER}
   </select>
+  <select id="selectByDishName" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />,
+    <include refid="Blob_Column_List" />
+    from t_dish
+    where dish_name = #{dishName,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_dish
     where dish_id = #{dishId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Dish">
-    insert into t_dish (dish_id, dish_name, dish_image, dish_desc,
+    insert into t_dish (dish_id, dishtype_id, dish_name, dish_image, dish_desc,
       add_time, dish_content)
-    values (#{dishId,jdbcType=INTEGER}, #{dishName,jdbcType=VARCHAR},#{dishImage,jdbcType=VARCHAR},
+    values (#{dishId,jdbcType=INTEGER}, #{dishtypeId,jdbcType=INTEGER}, #{dishName,jdbcType=VARCHAR},#{dishImage,jdbcType=VARCHAR},
       #{dishDesc,jdbcType=VARCHAR},  #{addTime,jdbcType=TIMESTAMP}, #{dishContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Dish">
@@ -66,6 +82,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="dishId != null">
         dish_id,
+      </if>
+      <if test="dishtypeId != null">
+        dishtype_id,
       </if>
       <if test="dishName != null">
         dish_name,
@@ -86,6 +105,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="dishId != null">
         #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="dishtypeId != null">
+        #{dishtypeId,jdbcType=INTEGER},
       </if>
       <if test="dishName != null">
         #{dishName,jdbcType=VARCHAR},
@@ -110,6 +132,9 @@
       <if test="dishName != null">
         dish_name = #{dishName,jdbcType=VARCHAR},
       </if>
+      <if test="dishtypeId != null">
+        dishtype_id = #{dishtypeId,jdbcType=INTEGER},
+      </if>
       <if test="dishDesc != null">
         dish_desc = #{dishDesc,jdbcType=VARCHAR},
       </if>
@@ -120,7 +145,7 @@
         dish_content = #{dishContent,jdbcType=LONGVARCHAR},
       </if>
       <if test="dishImage !=null">
-        and dish_image = #{dishImage,jdbcType=VARCHAR},
+        dish_image = #{dishImage,jdbcType=VARCHAR},
       </if>
     </set>
     where dish_id = #{dishId,jdbcType=INTEGER}
@@ -128,6 +153,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.beardream.model.Dish">
     update t_dish
     set dish_name = #{dishName,jdbcType=VARCHAR},
+      dishtype_id =  #{dishtypeId,jdbcType=INTEGER},
       dish_desc = #{dishDesc,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       dish_content = #{dishContent,jdbcType=LONGVARCHAR},
@@ -137,6 +163,7 @@
   <update id="updateByPrimaryKey" parameterType="com.beardream.model.Dish">
     update t_dish
     set dish_name = #{dishName,jdbcType=VARCHAR},
+      dishtype_id =  #{dishtypeId,jdbcType=INTEGER},
       dish_desc = #{dishDesc,jdbcType=VARCHAR},
       dish_image = #{dishImage,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP}

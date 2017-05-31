@@ -1,6 +1,7 @@
 package com.beardream.dao;
 
 import com.beardream.model.Business;
+import com.beardream.model.Dish;
 import com.beardream.model.DishType;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,6 @@ import java.util.List;
 
 @Repository
 @Mapper
-
 public interface DishTypeMapper {
     int deleteByPrimaryKey(Integer dishtypeId);
 
@@ -20,7 +20,9 @@ public interface DishTypeMapper {
 
     DishType selectByPrimaryKey(Integer dishtypeId);
 
-    List<DishType>findBySelective(DishType dishType);
+    DishType selectByTypeName(DishType dishType);
+
+    List<DishType> findBySelective(DishType dishType);
 
     int updateByPrimaryKeySelective(DishType record);
 

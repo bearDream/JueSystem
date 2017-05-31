@@ -7,8 +7,6 @@ public class DishType {
 
     private String typeName;
 
-    private Integer dishId;
-
     private Byte isShow;
 
     private Date addTime;
@@ -29,14 +27,6 @@ public class DishType {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName == null ? null : typeName.trim();
-    }
-
-    public Integer getDishId() {
-        return dishId;
-    }
-
-    public void setDishId(Integer dishId) {
-        this.dishId = dishId;
     }
 
     public Byte getIsShow() {

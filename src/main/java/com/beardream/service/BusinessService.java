@@ -31,7 +31,6 @@ public class BusinessService {
 
     //获取单个商家信息
     public Business find(Business business){
-        System.out.println(mBussinessMapper.selectByPrimaryKey(1));
         Business BusinessInfo = mBussinessMapper.findBySelective(business).get(0);
         return BusinessInfo;
     }
@@ -77,8 +76,8 @@ public class BusinessService {
 
     public Map getPage(Business business,int pageNum,int pageSize) {
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Business> businesses =mBussinessMapper.findBySelective(new Business());
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time desc");
+        List<Business> businesses =mBussinessMapper.findBySelective(null);
         PageInfo page = new PageInfo(businesses);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);

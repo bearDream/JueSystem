@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,11 +42,11 @@ public class DishTypeController {
     @ApiOperation("获取单个菜品分类信息")
     @GetMapping(value = "/get")
     @PermissionMethod(text = "获取菜品分类信息")
-
     public Result get(DishType dishType, BindingResult bindingResult){
         System.out.println(dishType.getDishtypeId());
-        if (dishTypeService.find(dishType)!=null)
-            return ResultUtil.success(dishTypeMapper.findBySelective(dishType));
+        DishType dishType1 = dishTypeService.find(dishType);
+        if (dishType1!=null)
+            return ResultUtil.success(dishType1);
         else
             return ResultUtil.error(-1,"分类不存在");
     }
@@ -54,19 +55,8 @@ public class DishTypeController {
     @ApiOperation("添加菜品分类")
     @PostMapping
     @PermissionMethod(text = "添加菜品分类")
-    public Result post(DishType dishType){
-        int result;
-        if (dishType==null)
-            return  ResultUtil.error(-1,"没有参数");
-        List<DishType> d = dishTypeMapper.findBySelective(dishType);
-        if (d.size()>0)
-            return ResultUtil.error(-1,"该种类的菜品已存在");
-            dishType.setAddTime(new Date());
-            result = dishTypeMapper.insertSelective(dishType);
-        if (result>0)
-            return  ResultUtil.success("成功添加菜品");
-        else
-            return ResultUtil.error(-1,"添加失败");
+    public @ResponseBody Result post(@RequestBody DishType dishType){
+        return dishTypeService.add(dishType);
     }
 
     @ApiOperation("删除菜品分类")
@@ -82,9 +72,9 @@ public class DishTypeController {
     }
 
     @ApiOperation("更新菜品分类")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PermissionMethod(text = "更新菜品分类")
-    public Result update(DishType dishType){
+    public @ResponseBody Result update(@RequestBody DishType dishType){
         int result;
         System.out.println(dishType.getDishtypeId());
          dishType.setAddTime(new Date());
@@ -98,15 +88,27 @@ public class DishTypeController {
     @ApiOperation("分页获取菜品种类")
     @GetMapping
     @com.beardream.ioc.Log
-    public Result getPage(DishType dishType, @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
-//        System.out.println(role.getRoleId());
-        System.out.println(pageNum);
-        System.out.println(pageSize);
+    public Result getPage(DishType dishType,
+                          @RequestParam(value = "pageNum",defaultValue = "1",required = false)  int pageNum,
+                          @RequestParam(value = "pageSize",defaultValue = "10",required = false)  int pageSize,
+                          BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-        if (dishTypeService.getPage(dishType,pageSize,pageNum)!=null)
-            return ResultUtil.success(dishTypeService.getPage(dishType,pageSize,pageNum));
+        Map resultMap = dishTypeService.getPage(dishType,pageNum,pageSize);
+        if (resultMap.get("page") !=null )
+            return ResultUtil.success(resultMap);
+        else
+            return ResultUtil.error(-1,"系统错误");
+    }
+
+    @ApiOperation("获取所有菜品种类")
+    @GetMapping("/getAll")
+    @com.beardream.ioc.Log
+    public Result getAllType(){
+        List<DishType> allType = dishTypeService.getAllType();
+        if (allType != null)
+            return ResultUtil.success(allType);
         else
             return ResultUtil.error(-1,"系统错误");
     }

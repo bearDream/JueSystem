@@ -31,7 +31,6 @@ public class NutritionService {
     public NutritionMapper mNutritionMapper;
 
     public Nutrition find(Nutrition nutrition){
-        System.out.println(mNutritionMapper.selectByPrimaryKey(nutrition.getNurtritionId()).getGrease());
         Nutrition nutritionInfo = mNutritionMapper.selectByPrimaryKey(nutrition.getNurtritionId());
         return nutritionInfo;
     }
@@ -45,14 +44,14 @@ public class NutritionService {
         return map;
     }
 
-    public String add(Nutrition nutrition){
+    public Result add(Nutrition nutrition){
         int result;
         nutrition.setAddTime(new Date());
         result = mNutritionMapper.insertSelective(nutrition);
         if (result>0){
-            return "添加成功";
+            return ResultUtil.success("添加成功");
         }else{
-            return "添加失败";
+            return ResultUtil.error(-1,"添加成功");
         }
     }
 

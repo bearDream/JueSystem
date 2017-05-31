@@ -101,6 +101,7 @@ public class UploadController {
 
     /*
         单个文件上传
+        type: business/dish/user
         存储的路径：
         JueImage-->businessImage-->20170521-->对应的文件
         JueImage-->dishImage-->20170521-->对应的文件

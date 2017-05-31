@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,9 +50,10 @@ public class DishController {
     @ApiOperation("添加菜品")
     @PostMapping
     @PermissionMethod(text = "添加菜品信息")
-    public Result post(Dish dish){
+    public @ResponseBody Result post(@RequestBody Dish dish){
         System.out.println(dish.getDishId());
-        return ResultUtil.success(mDishService.post(dish));
+        Result result = (mDishService.add(dish));
+        return result;
     }
 
     @ApiOperation("删除菜品")
@@ -63,9 +65,9 @@ public class DishController {
     }
 
     @ApiOperation("更新菜品")
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PermissionMethod(text = "更新菜品信息")
-    public Result put(Dish dish){
+    public @ResponseBody Result put(@RequestBody Dish dish){
         System.out.println(dish.getDishId());
         return ResultUtil.success(mDishService.put(dish));
     }

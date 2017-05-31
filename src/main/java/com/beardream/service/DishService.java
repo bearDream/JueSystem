@@ -34,19 +34,20 @@ public class DishService {
         return dishInfo;
     }
 
-    public String post(Dish dish){
+    public Result add(Dish dish){
         int result;
-        if (dish==null)
-            return "没有参数";
-        List<Dish> dishList = dishMapper.findBySelective(dish);
-        if (dishList.size()>0)
-            return "菜品已存在";
+        if (dish == null)
+            return ResultUtil.error(-1,"请检查参数是否均已填写");
+        // 查找这个菜品的菜品有没有添加过，若添加过则不能重复添加
+        Dish exitDish = dishMapper.selectByDishName(dish);
+        if (exitDish != null)
+            return ResultUtil.error(-1,"该菜品已经添加过了");
         dish.setAddTime(new Date());
         result = dishMapper.insertSelective(dish);
         if (result>0){
-            return "添加成功";
+            return ResultUtil.success("添加成功");
         }else{
-            return "添加失败";
+            return ResultUtil.success("添加失败");
         }
     }
 
