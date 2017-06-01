@@ -22,13 +22,14 @@
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
     <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+    <result column="tag_id" jdbcType="VARCHAR" property="tagId"/>
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBusiness" type="com.beardream.model.Dish">
     <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />
   </resultMap>
   <sql id="Base_Column_List">
     dish_business_id, dish_id, business_id, dish_type, is_favorable, is_show, is_top, 
-    order_count, dish_price, favorable_price, addtime
+    order_count, dish_price, favorable_price, addtime,tag_id
   </sql>
   <sql id="business_Dish_List">
      db.dish_business_id, d.dish_id, db.business_id, db.is_favorable, db.is_show,
@@ -95,11 +96,11 @@
     insert into t_dish_business (dish_business_id, dish_id, business_id, 
       dish_type, is_favorable, is_show, 
       is_top, order_count, dish_price, 
-      favorable_price, addtime)
+      favorable_price, addtime,tag_id)
     values (#{dishBusinessId,jdbcType=INTEGER}, #{dishId,jdbcType=INTEGER}, #{businessId,jdbcType=INTEGER}, 
       #{dishType,jdbcType=VARCHAR}, #{isFavorable,jdbcType=BIT}, #{isShow,jdbcType=BIT}, 
       #{isTop,jdbcType=BIT}, #{orderCount,jdbcType=INTEGER}, #{dishPrice,jdbcType=REAL}, 
-      #{favorablePrice,jdbcType=REAL}, #{addtime,jdbcType=TIMESTAMP})
+      #{favorablePrice,jdbcType=REAL}, #{addtime,jdbcType=TIMESTAMP},#{tagId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.DishBusiness">
     insert into t_dish_business
@@ -137,6 +138,9 @@
       <if test="addtime != null">
         addtime,
       </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="dishBusinessId != null">
@@ -171,6 +175,9 @@
       </if>
       <if test="addtime != null">
         #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tagId != null">
+        #{tag_id,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -207,6 +214,9 @@
       <if test="addtime != null">
         addtime = #{addtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="tagId != null">
+        tag_id = #{tagId,jdbcType=VARCHAR},
+      </if>
     </set>
     where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
   </update>
@@ -221,7 +231,8 @@
       order_count = #{orderCount,jdbcType=INTEGER},
       dish_price = #{dishPrice,jdbcType=REAL},
       favorable_price = #{favorablePrice,jdbcType=REAL},
-      addtime = #{addtime,jdbcType=TIMESTAMP}
+      addtime = #{addtime,jdbcType=TIMESTAMP},
+      tag_id = #{tagId,jdbcType=VARCHAR}
     where dish_business_id = #{dishBusinessId,jdbcType=INTEGER}
   </update>
 </mapper>
