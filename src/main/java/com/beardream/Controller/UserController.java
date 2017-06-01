@@ -49,6 +49,19 @@ public class UserController {
             return ResultUtil.error(-1,"用户不存在");
     }
 
+    @ApiOperation("获取单个用户信息")
+    @GetMapping("/get")
+    @com.beardream.ioc.Log
+    public Result get(User user) {
+        try {
+            User user1 = userService.find(user);
+            return ResultUtil.success(user1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResultUtil.error(-1,"查询出错");
+    }
+
     @ApiOperation("模糊查询用户")
     @GetMapping("/fuzzy")
     @com.beardream.ioc.Log

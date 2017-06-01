@@ -7,13 +7,15 @@ public class Article {
 
     private Integer userId;
 
+    private String title;
+
     private String coverImage;
 
     private Byte isShow;
 
-    private String content;
-
     private Date addTime;
+
+    private String content;
 
     public Integer getArticleId() {
         return articleId;
@@ -29,6 +31,14 @@ public class Article {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
     public String getCoverImage() {
@@ -47,12 +57,16 @@ public class Article {
         this.isShow = isShow;
     }
 
-    public String getContent() {
-        return content;
+    public Date getAddTime() {
+        return addTime;
     }
 
     public void setAddTime(Date addTime) {
         this.addTime = addTime;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public void setContent(String content) {

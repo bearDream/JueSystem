@@ -46,7 +46,7 @@ public class TagService {
     public Map getPage(Tag tag,int pageNum,int pageSize){
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("add_time asc");
-        List<Tag> tags =mTagMapper.findBySelective(new Tag());
+        List<Tag> tags =mTagMapper.findBySelective(tag);
         PageInfo page = new PageInfo(tags);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);

@@ -19,6 +19,66 @@ public class Dish {
 
     private String typeName;
 
+    private String dishRecImage;
+
+    private Integer nurtritionId;
+
+    private String grease;
+
+    private String heat;
+
+    private String sugarContent;
+
+    private Integer dishNutritionStatus;
+
+    public String getGrease() {
+        return grease;
+    }
+
+    public void setGrease(String grease) {
+        this.grease = grease;
+    }
+
+    public String getHeat() {
+        return heat;
+    }
+
+    public void setHeat(String heat) {
+        this.heat = heat;
+    }
+
+    public String getSugarContent() {
+        return sugarContent;
+    }
+
+    public void setSugarContent(String sugarContent) {
+        this.sugarContent = sugarContent;
+    }
+
+    public String getDishRecImage() {
+        return dishRecImage;
+    }
+
+    public void setDishRecImage(String dishRecImage) {
+        this.dishRecImage = dishRecImage;
+    }
+
+    public Integer getDishNutritionStatus() {
+        return dishNutritionStatus;
+    }
+
+    public void setDishNutritionStatus(Integer dishNutritionStatus) {
+        this.dishNutritionStatus = dishNutritionStatus;
+    }
+
+    public Integer getNurtritionId() {
+        return nurtritionId;
+    }
+
+    public void setNurtritionId(Integer nurtritionId) {
+        this.nurtritionId = nurtritionId;
+    }
+
     public String getTypeName() {
         return typeName;
     }

@@ -5,6 +5,7 @@ import com.beardream.Utils.TextUtil;
 import com.beardream.dao.DishMapper;
 import com.beardream.ioc.*;
 import com.beardream.model.*;
+import com.beardream.service.DishBusinessService;
 import com.beardream.service.DishService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,6 +36,9 @@ public class DishController {
 
     @Autowired
     private DishService mDishService;
+
+    @Autowired
+    private DishBusinessService mDishBusinessService;
 
     @ApiOperation("获取单个菜品信息")
     @GetMapping(value = "/get")
@@ -75,12 +79,21 @@ public class DishController {
     @ApiOperation("分页获取菜品")
     @GetMapping
     @com.beardream.ioc.Log
-    public Result getPage(Dish dish, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Dish dish, DishBusiness dishBusiness, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
-        if (mDishService.getPage(dish, pageNum,pageSize)!=null)
-            return ResultUtil.success(mDishService.getPage(dish, pageNum,pageSize));
+        // 1、如果传了商家id，则需要联合business_dish表查询，否则不需要
+        if (dishBusiness.getBusinessId() == null){
+            if (mDishService.getPage(dish, pageNum,pageSize)!=null)
+                return ResultUtil.success(mDishService.getPage(dish, pageNum,pageSize));
+            else
+                return ResultUtil.error(-1,"系统错误");
+        }
+
+        // 2、联合business_dish表查询,调用的是dishBusinessService来查询,获取的是该店铺没有的所有菜品
+        if (mDishBusinessService.getPage(dishBusiness, pageNum,pageSize)!=null)
+            return ResultUtil.success(mDishBusinessService.getPage(dishBusiness, pageNum,pageSize));
         else
             return ResultUtil.error(-1,"系统错误");
     }

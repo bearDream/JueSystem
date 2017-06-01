@@ -4,6 +4,10 @@
   <resultMap id="BaseResultMap" type="com.beardream.model.Dish">
     <id column="dish_id" jdbcType="INTEGER" property="dishId" />
     <result column="dishtype_id" jdbcType="INTEGER" property="dishtypeId" />
+    <result column="nurtrition_id" jdbcType="INTEGER" property="nurtritionId" />
+    <result column="sugar_content" jdbcType="INTEGER" property="sugarContent" />
+    <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
+    <result column="dish_rec_image" jdbcType="INTEGER" property="dishRecImage" />
     <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
     <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
@@ -14,22 +18,36 @@
     <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />
   </resultMap>
   <sql id="dishtype_Column_List">
-    d.dish_id, d.dishtype_id, dt.type_name, d.dish_name, d.dish_desc, d.dish_image, d.add_time
+    d.dish_id, d.dishtype_id, dt.type_name, d.dish_name, d.dish_desc, d.dish_image, d.add_time, d.nurtrition_id, d.dish_nutrition_status, d.dish_rec_image
+  </sql>
+  <sql id="nutrition_Column_List">
+    n.grease, n.heat, n.sugar_content
   </sql>
   <sql id="Base_Column_List">
-    dish_id, dishtype_id, dish_name, dish_desc, dish_image, add_time
+    dish_id, dishtype_id, dish_name, dish_desc, dish_image, add_time, nurtrition_id, dish_nutrition_status, dish_rec_image
   </sql>
   <sql id="Blob_Column_List">
     dish_content
   </sql>
+
   <select id="findBySelective" resultMap="BaseResultMap">
     SELECT
     <include refid="dishtype_Column_List" />,
+    <include refid="nutrition_Column_List" />,
     <include refid="Blob_Column_List" />
-    from t_dish d inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
+    from t_dish d inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id left join t_nutrition n on d.nurtrition_id=n.nurtrition_id
     <where>
       <if test="dishId != null">
         and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="nurtritionId != null">
+        and nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+      </if>
+      <if test="dishNutritionStatus != null">
+        and dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
+      </if>
+      <if test="dishRecImage != null">
+        and dish_rec_image = #{dishRecImage,jdbcType=VARCHAR}
       </if>
       <if test="dishtypeId != null">
         and dishtype_id = #{dishtypeId,jdbcType=INTEGER}
@@ -55,8 +73,9 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
     select
     <include refid="dishtype_Column_List" />,
+    <include refid="nutrition_Column_List" />,
     <include refid="Blob_Column_List" />
-    from t_dish d inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
+    from t_dish d inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id left join t_nutrition n on d.nurtrition_id=n.nurtrition_id
     where dish_id = #{dishId,jdbcType=INTEGER}
   </select>
   <select id="selectByDishName" resultMap="ResultMapWithBLOBs">
@@ -72,16 +91,26 @@
     where dish_id = #{dishId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.beardream.model.Dish">
-    insert into t_dish (dish_id, dishtype_id, dish_name, dish_image, dish_desc,
+    insert into t_dish (dish_id, dishtype_id, dish_name, dish_image, dish_desc,nurtrition_id,dish_nutrition_status, dish_rec_image
       add_time, dish_content)
     values (#{dishId,jdbcType=INTEGER}, #{dishtypeId,jdbcType=INTEGER}, #{dishName,jdbcType=VARCHAR},#{dishImage,jdbcType=VARCHAR},
-      #{dishDesc,jdbcType=VARCHAR},  #{addTime,jdbcType=TIMESTAMP}, #{dishContent,jdbcType=LONGVARCHAR})
+      #{dishDesc,jdbcType=VARCHAR}, #{nurtritionId,jdbcType=INTEGER}, #{dishNutritionStatus,jdbcType=INTEGER},#{dishRecImage,jdbcType=VARCHAR},
+       #{addTime,jdbcType=TIMESTAMP}, #{dishContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.beardream.model.Dish">
     insert into t_dish
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="dishId != null">
         dish_id,
+      </if>
+      <if test="nurtritionId != null">
+        nurtrition_id,
+      </if>
+      <if test="dishNutritionStatus != null">
+        dish_nutrition_status,
+      </if>
+      <if test="dishRecImage != null">
+        dish_rec_image,
       </if>
       <if test="dishtypeId != null">
         dishtype_id,
@@ -105,6 +134,15 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="dishId != null">
         #{dishId,jdbcType=INTEGER},
+      </if>
+      <if test="nurtritionId != null">
+        #{nurtritionId,jdbcType=INTEGER},
+      </if>
+      <if test="dishNutritionStatus != null">
+        #{dishNutritionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dishRecImage != null">
+        #{dishRecImage,jdbcType=VARCHAR},
       </if>
       <if test="dishtypeId != null">
         #{dishtypeId,jdbcType=INTEGER},
@@ -132,6 +170,15 @@
       <if test="dishName != null">
         dish_name = #{dishName,jdbcType=VARCHAR},
       </if>
+      <if test="nurtritionId != null">
+        nurtrition_id = #{nurtritionId,jdbcType=INTEGER},
+      </if>
+      <if test="dishNutritionStatus != null">
+        dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER},
+      </if>
+      <if test="dishRecImage != null">
+        dish_rec_image = #{dishRecImage,jdbcType=VARCHAR},
+      </if>
       <if test="dishtypeId != null">
         dishtype_id = #{dishtypeId,jdbcType=INTEGER},
       </if>
@@ -154,6 +201,9 @@
     update t_dish
     set dish_name = #{dishName,jdbcType=VARCHAR},
       dishtype_id =  #{dishtypeId,jdbcType=INTEGER},
+      nurtrition_id =  #{nurtritionId,jdbcType=INTEGER},
+      dish_nutrition_status =  #{dishNutritionStatus,jdbcType=INTEGER},
+      dish_rec_image =  #{dishRecImage,jdbcType=VARCHAR},
       dish_desc = #{dishDesc,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP},
       dish_content = #{dishContent,jdbcType=LONGVARCHAR},
@@ -164,6 +214,9 @@
     update t_dish
     set dish_name = #{dishName,jdbcType=VARCHAR},
       dishtype_id =  #{dishtypeId,jdbcType=INTEGER},
+      nurtrition_id =  #{nurtritionId,jdbcType=INTEGER},
+      dish_nutrition_status =  #{dishNutritionStatus,jdbcType=INTEGER},
+      dish_rec_image =  #{dishRecImage,jdbcType=VARCHAR},
       dish_desc = #{dishDesc,jdbcType=VARCHAR},
       dish_image = #{dishImage,jdbcType=VARCHAR},
       add_time = #{addTime,jdbcType=TIMESTAMP}

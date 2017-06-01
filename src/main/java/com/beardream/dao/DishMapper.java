@@ -1,6 +1,7 @@
 package com.beardream.dao;
 
 import com.beardream.model.Dish;
+import com.beardream.model.DishBusiness;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

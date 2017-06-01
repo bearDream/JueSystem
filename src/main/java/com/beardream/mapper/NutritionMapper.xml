@@ -47,7 +47,7 @@
     delete from t_nutrition
     where nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.beardream.model.Nutrition">
+  <insert id="insert" parameterType="com.beardream.model.Nutrition" useGeneratedKeys="true" keyProperty="nurtritionId">
     insert into t_nutrition (nurtrition_id, grease, heat, 
       sugar_content, add_time)
     values (#{nurtritionId,jdbcType=INTEGER}, #{grease,jdbcType=VARCHAR}, #{heat,jdbcType=VARCHAR}, 

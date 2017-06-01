@@ -12,12 +12,75 @@
     <result column="order_count" jdbcType="INTEGER" property="orderCount" />
     <result column="dish_price" jdbcType="REAL" property="dishPrice" />
     <result column="favorable_price" jdbcType="REAL" property="favorablePrice" />
+
+    <result column="nurtrition_id" jdbcType="INTEGER" property="nurtritionId" />
+    <result column="sugar_content" jdbcType="INTEGER" property="sugarContent" />
+    <result column="dish_nutrition_status" jdbcType="INTEGER" property="dishNutritionStatus" />
+    <result column="dish_rec_image" jdbcType="INTEGER" property="dishRecImage" />
+    <result column="dish_name" jdbcType="VARCHAR" property="dishName" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="dish_desc" jdbcType="VARCHAR" property="dishDesc" />
+    <result column="dish_image" jdbcType="VARCHAR" property="dishImage" />
     <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBusiness" type="com.beardream.model.Dish">
+    <result column="dish_content" jdbcType="LONGVARCHAR" property="dishContent" />
   </resultMap>
   <sql id="Base_Column_List">
     dish_business_id, dish_id, business_id, dish_type, is_favorable, is_show, is_top, 
     order_count, dish_price, favorable_price, addtime
   </sql>
+  <sql id="business_Dish_List">
+     db.dish_business_id, d.dish_id, db.business_id, db.is_favorable, db.is_show,
+     db.is_top, db.order_count, db.dish_price, db.favorable_price, db.addtime, d.dish_name,
+     d.dishtype_id, d.dish_image, d.dish_content, d.dish_desc, d.dish_nutrition_status, d.dish_rec_image, d.nurtrition_id
+  </sql>
+
+  <!-- 级联business_dish和dish表查询 -->
+  <select id="findBusinessDish" resultMap="BaseResultMap">
+    SELECT
+    <include refid="business_Dish_List" />
+    from t_dish d
+    inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
+    left join t_dish_business db on d.dish_id=db.dish_id
+    <where>
+      <if test="dishId != null">
+        and dish_id = #{dishId,jdbcType=INTEGER}
+      </if>
+      <if test="businessId != null">
+        and business_id = #{businessId,jdbcType=INTEGER}
+      </if>
+      <if test="nurtritionId != null">
+        and nurtrition_id = #{nurtritionId,jdbcType=INTEGER}
+      </if>
+      <if test="dishNutritionStatus != null">
+        and dish_nutrition_status = #{dishNutritionStatus,jdbcType=INTEGER}
+      </if>
+      <if test="dishRecImage != null">
+        and dish_rec_image = #{dishRecImage,jdbcType=VARCHAR}
+      </if>
+      <if test="dishtypeId != null">
+        and dishtype_id = #{dishtypeId,jdbcType=INTEGER}
+      </if>
+      <if test="dishName != null">
+        and dish_name = #{dishName,jdbcType=VARCHAR}
+      </if>
+      <if test="dishContent != null">
+        and dish_content = #{dishContent}
+      </if>
+      <if test="dishImage !=null">
+        and dish_image = #{dishImage,jdbcType=VARCHAR}
+      </if>
+      <if test="dishDesc != null">
+        and dish_desc = #{dishDescContent,jdbcType=VARCHAR}
+      </if>
+      <if test="addtime != null">
+        and addtime = #{addtime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+    order by db.addtime desc
+  </select>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
