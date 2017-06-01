@@ -11,6 +11,8 @@ public class DishBusiness {
 
     private String dishType;
 
+    private String tagId;
+
     private Boolean isFavorable;
 
     private Boolean isShow;
@@ -44,6 +46,14 @@ public class DishBusiness {
     private String sugarContent;
 
     private Integer dishNutritionStatus;
+
+    public String getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
+    }
 
     public String getSugarContent() {
         return sugarContent;

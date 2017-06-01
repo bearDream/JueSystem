@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 /**
  * Created by laxzh on 2017/5/6.
  * 菜品控制器
@@ -67,12 +69,34 @@ public class DishBusinessController {
     @ApiOperation("分页获取该商家的所有菜品")
     @GetMapping
     @com.beardream.ioc.Log
-    public Result getPage(Dish dish, DishBusiness dishBusiness, @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum, @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize, BindingResult bindingResult){
+    public Result getPage(Dish dish, DishBusiness dishBusiness,
+                          @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize,
+                          BindingResult bindingResult){
+        if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
+            return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
+        }
+        Map result = mDishBusinessService.getPage(dishBusiness, pageNum,pageSize);
+        if (result.get("page")!=null){
+            result.put("topNum", mDishBusinessService.getTopPage(dishBusiness, pageNum,pageSize));
+            return ResultUtil.success(result);
+        }
+        else
+            return ResultUtil.error(-1,"系统错误");
+    }
+
+    @ApiOperation("分页获取除去该商家的所有菜品")
+    @GetMapping("/not")
+    @com.beardream.ioc.Log
+    public Result getExceptPage(Dish dish, DishBusiness dishBusiness,
+                          @RequestParam(value = "pageNum", defaultValue = "1",required = false)  int pageNum,
+                          @RequestParam(value = "pageSize", defaultValue = "10",required = false)  int pageSize,
+                          BindingResult bindingResult){
         if (!TextUtil.isEmpty(pageNum) || !TextUtil.isEmpty(pageSize)){
             return ResultUtil.error(-1,"pageNum,pageNum不能为空！");
         }
         if (mDishBusinessService.getPage(dishBusiness, pageNum,pageSize)!=null)
-            return ResultUtil.success(mDishBusinessService.getPage(dishBusiness, pageNum,pageSize));
+            return ResultUtil.success(mDishBusinessService.getNotPage(dishBusiness, pageNum,pageSize));
         else
             return ResultUtil.error(-1,"系统错误");
     }

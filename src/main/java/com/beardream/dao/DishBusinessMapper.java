@@ -17,6 +17,8 @@ public interface DishBusinessMapper {
 
     List<DishBusiness> findBusinessDish(DishBusiness dishBusiness);
 
+    List<DishBusiness> findNotBusinessDish(DishBusiness dishBusiness);
+
     DishBusiness selectByPrimaryKey(Integer dishBusinessId);
 
     int updateByPrimaryKeySelective(DishBusiness record);

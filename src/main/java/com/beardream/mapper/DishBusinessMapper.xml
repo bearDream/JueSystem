@@ -36,6 +36,9 @@
      db.is_top, db.order_count, db.dish_price, db.favorable_price, db.addtime, d.dish_name,
      d.dishtype_id, d.dish_image, d.dish_content, d.dish_desc, d.dish_nutrition_status, d.dish_rec_image, d.nurtrition_id
   </sql>
+  <sql id="Dish_List">
+    d.dish_id,d.dish_name,d.dishtype_id, d.dish_image, d.dish_content, d.dish_desc, d.dish_nutrition_status, d.dish_rec_image, d.nurtrition_id
+  </sql>
 
   <!-- 级联business_dish和dish表查询 -->
   <select id="findBusinessDish" resultMap="BaseResultMap">
@@ -64,21 +67,44 @@
         and dishtype_id = #{dishtypeId,jdbcType=INTEGER}
       </if>
       <if test="dishName != null">
-        and dish_name = #{dishName,jdbcType=VARCHAR}
-      </if>
-      <if test="dishContent != null">
-        and dish_content = #{dishContent}
+        and dish_name LIKE CONCAT('%', #{dishName}, '%')
       </if>
       <if test="dishImage !=null">
         and dish_image = #{dishImage,jdbcType=VARCHAR}
       </if>
+      <if test="isTop !=null">
+        and is_top = #{isTop,jdbcType=BIT}
+      </if>
+      <if test="isShow !=null">
+        and is_show = #{isShow,jdbcType=BIT}
+      </if>
+      <if test="isFavorable !=null">
+        and is_favorable = #{isFavorable,jdbcType=BIT}
+      </if>
       <if test="dishDesc != null">
-        and dish_desc = #{dishDescContent,jdbcType=VARCHAR}
+        and dish_desc = #{dishDesc,jdbcType=VARCHAR}
+      </if>
+      <if test="dishContent != null">
+        and dish_content = #{dishContent}
       </if>
       <if test="addtime != null">
         and addtime = #{addtime,jdbcType=TIMESTAMP}
       </if>
     </where>
+    order by db.addtime desc
+  </select>
+
+  <!-- 排除该商家已经拥有的菜品 -->
+  <select id="findNotBusinessDish" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Dish_List" />
+    from t_dish d
+    inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
+    where dish_id not in (SELECT db.dish_id
+      from t_dish d
+      inner join t_dish_type dt on d.dishtype_id=dt.dishtype_id
+      left join t_dish_business db on d.dish_id=db.dish_id
+      where business_id=#{businessId,jdbcType=INTEGER})
     order by db.addtime desc
   </select>
 

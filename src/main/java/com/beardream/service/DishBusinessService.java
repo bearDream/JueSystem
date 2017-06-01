@@ -8,6 +8,7 @@ import com.beardream.model.Dish;
 import com.beardream.model.DishBusiness;
 import com.beardream.model.Nutrition;
 import com.beardream.model.Result;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,23 @@ public class DishBusinessService {
         //获取第1页，10条内容，默认查询总数count
         PageHelper.startPage(pageNum , pageSize).setOrderBy("addtime asc");
         List<DishBusiness> dishs =mDishBusinessMapper.findBusinessDish(dishBusiness);
+        PageInfo page = new PageInfo(dishs);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("page",page);
+        return map;
+    }
+
+    // 获取被推荐is_top的菜品
+    public Integer getTopPage(DishBusiness dishBusiness, int pageNum, int pageSize){
+        dishBusiness.setIsTop(true);
+        List<DishBusiness> topDishs =mDishBusinessMapper.findBusinessDish(dishBusiness);
+        return topDishs.size();
+    }
+
+    public Map getNotPage(DishBusiness dishBusiness, int pageNum, int pageSize){
+        //获取第1页，10条内容，默认查询总数count
+        PageHelper.startPage(pageNum , pageSize).setOrderBy("d.add_time asc");
+        List<DishBusiness> dishs =mDishBusinessMapper.findNotBusinessDish(dishBusiness);
         PageInfo page = new PageInfo(dishs);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page",page);
