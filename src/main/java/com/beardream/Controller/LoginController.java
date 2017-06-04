@@ -1,6 +1,7 @@
 package com.beardream.Controller;
 
 import com.beardream.Utils.Constants;
+import com.beardream.Utils.Json;
 import com.beardream.Utils.ResultUtil;
 import com.beardream.dao.UserMapper;
 import com.beardream.model.User;
@@ -63,7 +64,8 @@ public class LoginController {
         if (session.getAttribute(Constants.USER) == null){
             return ResultUtil.error(-1,"未登录");
         }else {
-            return ResultUtil.success("已登录");
+            User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+            return ResultUtil.success(user);
         }
     }
 
@@ -73,7 +75,8 @@ public class LoginController {
         if (session.getAttribute(Constants.USER) == null){
             return ResultUtil.error(-1,"未登录");
         }else {
-            return ResultUtil.success("已登录");
+            User user = Json.fromJson((String) session.getAttribute(Constants.USER), User.class);
+            return ResultUtil.success(user);
         }
     }
 
